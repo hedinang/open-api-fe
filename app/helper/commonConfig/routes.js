@@ -1,5 +1,5 @@
 import URL_CONFIG from "services/urlConfig";
-import URL_MANAGE_PROJECT from "services/ProjectService/url";
+// import URL_MANAGE_PROJECT from "services/ProjectService/url";
 import i18next from "i18next";
 // import { CONTRACT_MODULE_ROUTE } from "services/ContractModuleService";
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import ApprovalConfigService from "services/ApprovalConfigService";
+// import ApprovalConfigService from "services/ApprovalConfigService";
 import { useSelector } from "react-redux";
 import { RESPONSE_STATUS } from "helper/constantsDefined";
 import useToast from "./useToast";
@@ -24,6 +24,7 @@ const useApprovalConfig = (featureCode) => {
         } catch (error) {
             showToast("error", `Approval Config: ${error.response ? error.response.data.message : error.message}`);
         }
+        
     };
 
     useEffect(() => {

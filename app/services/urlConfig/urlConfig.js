@@ -5,11 +5,11 @@
 // import BANK_ACCOUNT_ROUTES_PATH from "routes/EntityAdmin/ManageBankAccount/routes";
 // import FACILITY_ROUTES_PATH from "routes/EntityAdmin/ManageFacility/routes";
 // import SUPPLIER_BANK_ACCOUNT_ROUTES_PATH from "routes/EntityAdmin/ManageSupplierBankAccount/routes";
-import MEDIA_API from "../MediaService/MediaUrlConfig";
+// import MEDIA_API from "../MediaService/MediaUrlConfig";
 // import MANAGE_PROJECT_FORECAST_API from "./UrlFeatureConfigurations/ManageProjectForecast/ManageProjectForecasturlConfig";
-import APPROVAL_MATRIX_MANAGEMENT_API from "./UrlFeatureConfigurations/ApprovalMatrixManagement/ApprovalMatrixManagementUrlConfig";
-import MANAGE_PROJECT_API from "./UrlFeatureConfigurations/ManageProject/ManageProjectUrlConfig";
-import { PPR_API, PPR_ROUTING } from "./UrlFeatureConfigurations/PurchasePreRequision/PurchasePreRequisitionUrlConfig";
+// import APPROVAL_MATRIX_MANAGEMENT_API from "./UrlFeatureConfigurations/ApprovalMatrixManagement/ApprovalMatrixManagementUrlConfig";
+// import MANAGE_PROJECT_API from "./UrlFeatureConfigurations/ManageProject/ManageProjectUrlConfig";
+// import { PPR_API, PPR_ROUTING } from "./UrlFeatureConfigurations/PurchasePreRequision/PurchasePreRequisitionUrlConfig";
 
 const ENTITIES_PREFIX = "entities";
 const FACILITY_PREFIX = "finance/finance";
@@ -205,22 +205,22 @@ const URL_CONFIG = {
     /** END MANAGE BANK ACCOUNT */
 
     /* PRE-REQUISITION - APIs */
-    PPR_API,
+    // PPR_API,
     /* END PRE-REQUISITION - APIs */
 
     /* MANAGE PROJECT - APIs */
-    MANAGE_PROJECT_API,
+    // MANAGE_PROJECT_API,
     /*  */
 
     /* APPROVAL MATRIX MANAGEMENT - APIs */
-    APPROVAL_MATRIX_MANAGEMENT_API,
+    // APPROVAL_MATRIX_MANAGEMENT_API,
     /*  */
 
     /* MANAGE PROJECT FORECAST */
     // MANAGE_PROJECT_FORECAST_API,
 
     /* MEDIA */
-    MEDIA_API,
+    // MEDIA_API,
 
     /* MANAGE FACILITY */
     GET_FACILITY_LIST: `${BASE_URL + FACILITY_PREFIX}/filter-list-project-facility`,
@@ -288,7 +288,7 @@ const URL_CONFIG = {
 
     MANAGE_ADMIN_MATRIX: "/manage-admin-matrix",
     /* PRE-REQUISITION - App Routing */
-    PPR_ROUTING,
+    // PPR_ROUTING,
     /* END PRE-REQUISITION - App Routing */
 
     /** MANAGE PROJECT FORECAST ROUTEs */
