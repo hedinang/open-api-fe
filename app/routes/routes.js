@@ -2,8 +2,8 @@ import URL_CONFIG from "services/urlConfig";
 import i18next from "i18next";
 
 
-import ServiceList from "./EntityAdmin/ManageService/ServiceList/ServiceList";
-import ServiceDetails from "./EntityAdmin/ManageService/ServiceDetails/ServiceDetails";
+import ServiceList from "./Admin/ManageService/ServiceList/ServiceList";
+import ServiceDetails from "./Admin/ManageService/ServiceDetails/ServiceDetails";
 
 
 const ServiceRoutes = [
