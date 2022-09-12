@@ -5,7 +5,9 @@ import AgDropdownInput from "components/AgDropdownInput";
 import { AgGridTable } from "../AgGridTable";
 import getAddItemReqColDefs from "./AddItemReqColDefs";
 import CustomTooltip from "./CustomTooltip";
-import getItemRequestConvertPPR2PR from "./ItemRequestConvertPPR2PR";
+import getItemParameter from "./ItemParameter";
+import getItemGroup from "./ItemGroup";
+import getItemServerUrl from "./ItemServerUrl";
 import SelectWithHorizontalLine from "./SelectWithHorizontalLine";
 
 const defaultColDef = {
@@ -69,15 +71,19 @@ const AddItemRequest = (props) => {
         taxRecords,
         onCellValueChanged,
         disabled,
-        convertPPR2PR,
-        isPurchaseOrderItems,
         isProject,
         isSupplier,
         listCategory,
         isPrePurchaseOrderItems,
-        isPendingSubmission,
-        priceTypes = PRICE_TYPE_DEFAULT,
-        pendingReviewPO
+        serviceCreate,
+        groupTable,
+        serverUrlTable,
+        apiCreate,
+        urlName,
+        groupName,
+        priority,
+
+
     } = props;
 
     const ActionDelete = (params) => {
@@ -111,8 +117,8 @@ const AddItemRequest = (props) => {
     const AccountCellRenderer = ({ value }) => value?.accountNumber ?? value ?? "";
 
     const getColumnDefs = () => {
-        if (convertPPR2PR) {
-            return getItemRequestConvertPPR2PR(
+        if (apiCreate) {
+            return getItemParameter(
                 suppliers,
                 uoms,
                 currencies,
@@ -128,42 +134,19 @@ const AddItemRequest = (props) => {
                 listAllSuppliers
             );
         }
-        if (isPendingSubmission && isPrePurchaseOrderItems) {
-            return getAddItemReqColDefs(
-                suppliers,
-                uoms,
-                currencies,
-                addresses,
-                glAccounts,
-                taxRecords,
-                disabled,
-                isPurchaseOrderItems,
-                isProject,
-                isSupplier,
-                listCategory,
-                isPrePurchaseOrderItems,
-                PRICE_TYPE_DEFAULT,
-                isPendingSubmission
+        if (groupTable) {
+            return getItemGroup(
+                urlName,
+                priority
             );
         }
 
-        return getAddItemReqColDefs(
-            suppliers,
-            uoms,
-            currencies,
-            addresses,
-            glAccounts,
-            taxRecords,
-            disabled,
-            isPurchaseOrderItems,
-            isProject,
-            isSupplier,
-            listCategory,
-            isPrePurchaseOrderItems,
-            PRICE_TYPE_DEFAULT,
-            isPendingSubmission,
-            pendingReviewPO
-        );
+        if (serverUrlTable) {
+            return getItemServerUrl(
+                groupName,
+                priority
+            );
+        }
     };
 
     return (

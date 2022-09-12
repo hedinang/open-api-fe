@@ -22,49 +22,38 @@ import SSORedirectPage from "./Pages/Login/SSORedirect";
 export const RoutedContent = ({ setCrumbs }) => (
     <Switch>
         <Redirect from="/" to="/dashboard" exact />
-        {
-            routes.map(({ path, isProtected, Component }) => {
-                if (isProtected === true) {
-                    return (
-                        <ProtectedRoute
-                            exact
-                            path={path}
-                            component={Component}
-                            key={uuidv4()}
-                            setCrumbs={setCrumbs}
-                        />
-                    );
-                }
-                return (
-                    <Route
-                        exact
-                        path={path}
-                        key={uuidv4()}
-                        render={(props) => {
-                            const crumbs = routes
+        {routes.map(({
+            path, name, isProtected, Component, render, doxaAdmin
+        }, key)=>{
+            return (
+                <Route
+                    exact
+                    path={path}
+                    key={uuidv4()}
+                    render={(props) => {
+                        const crumbs = routes
                             // Get all routes that contain the current one.
-                                .filter(({ path }) => props.match.path.includes(path))
+                            .filter(({ path }) => props.match.path.includes(path))
                             // Swap out any dynamic routes with their param values.
                             // E.g. "/pizza/:pizzaId" will become "/pizza/1"
-                                .map(({ path, ...rest }) => ({
-                                    path: Object.keys(props.match.params).length
-                                        ? Object.keys(props.match.params).reduce(
-                                            (path, param) => path.replace(
-                                                `:${param}`, props.match.params[param]
-                                            ), path
-                                        )
-                                        : path,
-                                    ...rest
-                                }));
-                            setCrumbs(crumbs);
-                            return (
-                                <Component {...props} />
-                            );
-                        }}
-                    />
-                );
-            })
-        }
+                            .map(({ path, ...rest }) => ({
+                                path: Object.keys(props.match.params).length
+                                    ? Object.keys(props.match.params).reduce(
+                                        (path, param) => path.replace(
+                                            `:${param}`, props.match.params[param]
+                                        ), path
+                                    )
+                                    : path,
+                                ...rest
+                            }));
+                        setCrumbs(crumbs);
+                        return (
+                            <Component {...props} />
+                        );
+                    }}
+                />
+            );
+        })}
         {/* <Route path="/sso_redirect" render={(props) => <SSORedirectPage {...props} />} /> */}
     </Switch>
 );

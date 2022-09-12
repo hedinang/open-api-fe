@@ -14,14 +14,14 @@ import {
 } from "components";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router";
-import DeliveryOrderService from "services/DeliveryOrderService/DeliveryOrderService";
-import PrePurchaseOrderService from "services/PrePurchaseOrderService/PrePurchaseOrderService";
-import InvoiceService from "services/InvoiceService/InvoiceService";
-import PurchaseOrderService from "services/PurchaseOrderService/PurchaseOrderService";
-import PaymentService from "services/PaymentService/PaymentService";
+// import DeliveryOrderService from "services/DeliveryOrderService/DeliveryOrderService";
+// import PrePurchaseOrderService from "services/PrePurchaseOrderService/PrePurchaseOrderService";
+// import InvoiceService from "services/InvoiceService/InvoiceService";
+// import PurchaseOrderService from "services/PurchaseOrderService/PurchaseOrderService";
+// import PaymentService from "services/PaymentService/PaymentService";
 // import GoodsReceiptService from "services/GoodsReceiptService/GoodsReceiptService";
-import PurchaseRequestService from "services/PurchaseRequestService/PurchaseRequestService";
-import PreRequisitionService from "services/PreRequisitionService";
+// import PurchaseRequestService from "services/PurchaseRequestService/PurchaseRequestService";
+// import PreRequisitionService from "services/PreRequisitionService";
 import { IconButton } from "@material-ui/core";
 import AuditTrailDOColDefs from "./AuditTrailColDefs";
 import { AgGridTable } from "../AgGridTable";
@@ -90,63 +90,63 @@ const Overview = (props) => {
         const payRoute = "/payment/payment-details";
         const { data } = params;
         switch (data.type) {
-        case "PPR":
-            history.push({
-                pathname: pprRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "PR":
-            history.push({
-                pathname: prRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "PPO":
-            history.push({
-                pathname: ppoRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "PO":
-            history.push({
-                pathname: poRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "DO":
-            history.push({
-                pathname: doRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "GR":
-            history.push({
-                pathname: grRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "INV":
-            history.push({
-                pathname: invRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        case "PAY":
-            history.push({
-                pathname: payRoute,
-                search: `?uuid=${data.uuid}`,
-                state: { }
-            });
-            break;
-        default: break;
+            case "PPR":
+                history.push({
+                    pathname: pprRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "PR":
+                history.push({
+                    pathname: prRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "PPO":
+                history.push({
+                    pathname: ppoRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "PO":
+                history.push({
+                    pathname: poRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "DO":
+                history.push({
+                    pathname: doRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "GR":
+                history.push({
+                    pathname: grRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "INV":
+                history.push({
+                    pathname: invRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            case "PAY":
+                history.push({
+                    pathname: payRoute,
+                    search: `?uuid=${data.uuid}`,
+                    state: {}
+                });
+                break;
+            default: break;
         }
     };
 
@@ -165,38 +165,38 @@ const Overview = (props) => {
         const newRowData = [...rowDataCol];
         let resOverview;
         switch (data.type) {
-        case "PR":
-            resOverview = await PurchaseRequestService
-                .getDetailsPurchaseRequisitionOverview(companyUuid, data.uuid, true);
-            break;
-        case "PPO":
-            resOverview = await PrePurchaseOrderService
-                .getPPOOverviewDetails(companyUuid, data.uuid, true);
-            break;
-        case "PO":
-            resOverview = await PurchaseOrderService
-                .getDetailsPOOverview(companyUuid, data.uuid, true);
-            break;
-        case "DO":
-            resOverview = await DeliveryOrderService
-                .getDOOverview(companyUuid, data.uuid, true);
-            break;
-        case "GR":
-            resOverview = await GoodsReceiptService
-                .grOverviewDetails(companyUuid, data.uuid, true);
-            break;
-        case "INV":
-            resOverview = await PaymentService.getOverviewByInvoice(
-                companyUuid, data.uuid
-            );
-            break;
-        case "PAY":
-            resOverview = await PaymentService.getPaymentOverview(
-                companyUuid, data.uuid
-            );
-            break;
-        default:
-            break;
+            case "PR":
+                resOverview = await PurchaseRequestService
+                    .getDetailsPurchaseRequisitionOverview(companyUuid, data.uuid, true);
+                break;
+            case "PPO":
+                resOverview = await PrePurchaseOrderService
+                    .getPPOOverviewDetails(companyUuid, data.uuid, true);
+                break;
+            case "PO":
+                resOverview = await PurchaseOrderService
+                    .getDetailsPOOverview(companyUuid, data.uuid, true);
+                break;
+            case "DO":
+                resOverview = await DeliveryOrderService
+                    .getDOOverview(companyUuid, data.uuid, true);
+                break;
+            case "GR":
+                resOverview = await GoodsReceiptService
+                    .grOverviewDetails(companyUuid, data.uuid, true);
+                break;
+            case "INV":
+                resOverview = await PaymentService.getOverviewByInvoice(
+                    companyUuid, data.uuid
+                );
+                break;
+            case "PAY":
+                resOverview = await PaymentService.getPaymentOverview(
+                    companyUuid, data.uuid
+                );
+                break;
+            default:
+                break;
         }
         const dataChild = resOverview ? resOverview.data.data : [];
         dataChild.forEach((item) => {
@@ -228,46 +228,46 @@ const Overview = (props) => {
         data.parentDocumentType.forEach(async (item, index) => {
             let resOverview;
             switch (item) {
-            case "PPR":
-                resOverview = await PreRequisitionService
-                    .getPPROverview(
-                        companyUuid, data.parentDocumentUuid[index], false
+                case "PPR":
+                    resOverview = await PreRequisitionService
+                        .getPPROverview(
+                            companyUuid, data.parentDocumentUuid[index], false
+                        );
+                    break;
+                case "PR":
+                    resOverview = await PurchaseRequestService
+                        .getDetailsPurchaseRequisitionOverview(
+                            companyUuid, data.parentDocumentUuid[index], false
+                        );
+                    break;
+                case "PPO":
+                    resOverview = await PrePurchaseOrderService
+                        .getPPOOverviewDetails(companyUuid, data.parentDocumentUuid[index], false);
+                    break;
+                case "PO":
+                    resOverview = await PurchaseOrderService
+                        .getDetailsPOOverview(companyUuid, data.parentDocumentUuid[index], false);
+                    break;
+                case "DO":
+                    resOverview = await DeliveryOrderService
+                        .getDOOverview(companyUuid, data.parentDocumentUuid[index], false);
+                    break;
+                case "GR":
+                    resOverview = await GoodsReceiptService
+                        .grOverviewDetails(companyUuid, data.parentDocumentUuid[index], false);
+                    break;
+                case "INV":
+                    resOverview = await PaymentService.getOverviewByInvoice(
+                        companyUuid, data.parentDocumentUuid[index]
                     );
-                break;
-            case "PR":
-                resOverview = await PurchaseRequestService
-                    .getDetailsPurchaseRequisitionOverview(
-                        companyUuid, data.parentDocumentUuid[index], false
+                    break;
+                case "PAY":
+                    resOverview = await PaymentService.getPaymentOverview(
+                        companyUuid, data.parentDocumentUuid[index]
                     );
-                break;
-            case "PPO":
-                resOverview = await PrePurchaseOrderService
-                    .getPPOOverviewDetails(companyUuid, data.parentDocumentUuid[index], false);
-                break;
-            case "PO":
-                resOverview = await PurchaseOrderService
-                    .getDetailsPOOverview(companyUuid, data.parentDocumentUuid[index], false);
-                break;
-            case "DO":
-                resOverview = await DeliveryOrderService
-                    .getDOOverview(companyUuid, data.parentDocumentUuid[index], false);
-                break;
-            case "GR":
-                resOverview = await GoodsReceiptService
-                    .grOverviewDetails(companyUuid, data.parentDocumentUuid[index], false);
-                break;
-            case "INV":
-                resOverview = await PaymentService.getOverviewByInvoice(
-                    companyUuid, data.parentDocumentUuid[index]
-                );
-                break;
-            case "PAY":
-                resOverview = await PaymentService.getPaymentOverview(
-                    companyUuid, data.parentDocumentUuid[index]
-                );
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
             }
             const dataParent = resOverview ? resOverview.data.data : [];
             if (dataParent.length > 0) {

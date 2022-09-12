@@ -62,15 +62,11 @@ const SidebarWithNavbarNavbar = ({ crumbs }) => {
             <Nav navbar>
                 <NavItem>
                     <Link
-                        to="/dashboard"
+                        // to="/system-service/service-list"
                         className="sidebar-menu__entry__link doxa-navbar-link"
-                        onClick={() => redirectPage("Dashboard")}
+                        onClick={() => redirectPage("Service")}
                     >
-                        {permissionReducer.currentCategory === "Dashboard" ? (
-                            <b>Dashboard</b>
-                        ) : (
-                            "Dashboard"
-                        )}
+                        Service
                     </Link>
                 </NavItem>
             </Nav>
@@ -99,9 +95,9 @@ const SidebarWithNavbarNavbar = ({ crumbs }) => {
                                 <SidebarTrigger />
                             </NavItem>
                         </Nav>
-                        {isAuthenticated && (
+                        {/* {isAuthenticated && ( */}
                             <ScrollNavBar />
-                        )}
+                        {/* )} */}
                         <Nav navbar className="ml-auto nav-bar-sub-tool align-items-center">
                             <NavbarTopMenuToggle />
                             {isAuthenticated && (
@@ -113,7 +109,7 @@ const SidebarWithNavbarNavbar = ({ crumbs }) => {
                         </Nav>
                     </Navbar>
                     {/*    Second Navbar    */}
-                    {isAuthenticated && (
+                    {/* {isAuthenticated && ( */}
                         <NavItem
                             className={`d-none d-md-block ${classes["navbar-breadcrumb"]}`}
                         >
@@ -234,7 +230,7 @@ const SidebarWithNavbarNavbar = ({ crumbs }) => {
                                 </React.Fragment>
                             )))}
                         </NavItem>
-                    )}
+                    {/* )} */}
                 </>
             )}
         </ThemeConsumer>

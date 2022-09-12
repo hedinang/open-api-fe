@@ -33,21 +33,21 @@ const DefaultSidebar = () => {
     const [companyLogo, setCompanyLogo] = useState();
 
     const getItems = () => {
-        if (permissionReducer.currentCategory === "Dashboard") {
-            setData((prevStates) => ({
-                ...prevStates,
-                items: authReducer?.userDetails?.roles?.includes(ROLES.DOXA_ADMIN)
-                    ? RouteService.getRouteForDOXAAdmin()
-                    : null
-            }));
-        } else {
-            const rawRoot = permissionReducer.userPermission.ADMIN.routes[permissionReducer.currentCategory];
-            const flexibleRoute = RouteService.getRoutes(rawRoot);
-            setData((prevStates) => ({
-                ...prevStates,
-                items: flexibleRoute
-            }));
+        const rawRoot = {
+            "uuid": "908d3553-4714-4f3c-892a-8f8359830636",
+            "featureName": "Developer Work Request",
+            "featureCode": "dwr",
+            "category": "Requisitions",
+            "profile": "USER",
+            "subCategory": "Requisitions",
+            "moduleCode": "DEVELOPER_MODULE"
         }
+        const flexibleRoute = RouteService.getRoutes();
+        setData((prevStates) => ({
+            ...prevStates,
+            items: flexibleRoute
+        }));
+        // }
     };
 
     const getCompanies = () => {
@@ -58,12 +58,7 @@ const DefaultSidebar = () => {
     };
 
     useEffect(() => {
-        if (authReducer && authReducer?.userDetails?.companies?.length > 0
-            && permissionReducer && permissionReducer?.currentCompany
-        ) {
-            getCompanies();
-            getItems();
-        }
+        getItems();
     }, [authReducer, permissionReducer]);
 
     useEffect(() => {
@@ -78,7 +73,7 @@ const DefaultSidebar = () => {
         const currentCompanyObj = companies.find((x) => x.companyUuid === companyUuid);
         setToLS("companyRole", currentCompanyObj);
         setCompanyLogo(currentCompanyObj.logoUrl);
-        dispatch(getUserPermission(currentCompanyObj, uuid));
+        // dispatch(getUserPermission(currentCompanyObj, uuid));
         localStorage.setItem("companyRole", JSON.stringify(currentCompanyObj));
         history.push("/dashboard");
     };
