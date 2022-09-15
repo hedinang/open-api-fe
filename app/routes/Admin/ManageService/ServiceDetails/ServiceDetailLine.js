@@ -263,7 +263,10 @@ const ServiceDetailLine = (props) => {
                                     <Col xs='2'>
                                         Name
                                     </Col>
-                                    <Col xs='10'>
+                                    <Col xs='5'>
+                                        Input
+                                    </Col>
+                                    <Col xs='5'>
                                         Description
                                     </Col>
                                 </Row>

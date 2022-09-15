@@ -9,10 +9,12 @@ const formatNumber = (params) => {
 };
 
 const getItemParameter = (
-    name,
-    type,
+    paramName,
+    dataType,
+    paramType,
     defaultValue,
-    mandatory
+    mandatory,
+    note
 ) => [
         {
             headerName: i18next.t("action"),
@@ -22,34 +24,42 @@ const getItemParameter = (
             width: 100
         },
         {
-            headerName: i18next.t("name"),
-            field: "action",
-            cellRenderer: "actionDelete",
-            filter: false,
-            width: 438
+            headerName: i18next.t("paramName"),
+            field: "paramName",
+            editable: true,
+            width: 250
         },
         {
-            headerName: i18next.t("type"),
-            field: "itemCode",
-            valueGetter: (params) => params.data?.itemCode?.slice(0, 20),
-            width: 250
+            headerName: i18next.t("dataType"),
+            field: "dataType",
+            editable: true,
+            width: 150
+
+        },
+        {
+            headerName: i18next.t("paramType"),
+            field: "paramType",
+            editable: true,
+            width: 150
 
         },
         {
             headerName: i18next.t("defaultValue"),
-            field: "itemName",
-            valueGetter: (params) => params.data?.itemName?.slice(0, 200),
-
-            width: 438
+            field: "defaultValue",
+            editable: true,
+            width: 300
         },
         {
             headerName: i18next.t("mandatory"),
-            field: "itemDescription",
-            cellEditor: "agLargeTextCellEditor",
-            cellEditorParams: { maxLength: 250 },
-
-            tooltipField: "itemDescription",
-            width: 250
+            field: "mandatory",
+            editable: true,
+            width: 150
+        },
+        {
+            headerName: i18next.t("note"),
+            field: "note",
+            editable: true,
+            width: 400
         }
     ];
 

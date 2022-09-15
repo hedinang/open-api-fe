@@ -27,7 +27,9 @@ const ServiceRequestHeader = (props) => {
                             onChange={e => onChangeHeader(requestHeader.name, e)}
                         />
                     </Col>
-                    <Col xs='5'></Col>
+                    <Col xs='5'>
+                        <div>{requestHeader.description}</div>
+                    </Col>
                 </Row>
             </Col>
         </Row>

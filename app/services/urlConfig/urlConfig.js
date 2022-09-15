@@ -23,6 +23,31 @@ export const BASE_ENTITIES = `${BASE_URL + ENTITIES_PREFIX}`;
 // const BASE_ENTITIES_TRANSACTION_PREFIX = `${BASE_ENTITIES + TRANSACTION_PREFIX}`;
 
 const URL_CONFIG = {
+    CREATE_SERVICE: `${BASE_URL}/service/create`,
+    LIST_SERVICE: `${BASE_URL}/service/list`,
+    LIST_API_METHOD: `${BASE_URL}/method/list`,
+    LIST_ENCRYPTION: `${BASE_URL}/encryption/list`,
+    LIST_GROUP: `${BASE_URL}/service/group/list/{id}`,
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /** remove */
+
+
     ROOT_AUTH_URL: BASE_URL + AUTH_PREFIX,
 
     LOGIN_PATH: `${BASE_URL + AUTH_PREFIX}/users/signin`,
@@ -281,7 +306,7 @@ const URL_CONFIG = {
     LIST_CATALOGUES: "/manage-catalogue",
     CATALOGUE_DETAILS: "/manage-catalogue/details?uuid=",
 
-    
+
     LIST_MANAGE_PROJECT_TRADE: "/list-trade-code",
     CREATE_PROJECT_TRADE: "/create-trade-code",
     UPDATE_PROJECT_TRADE: "/trade-code-details?uuid=",

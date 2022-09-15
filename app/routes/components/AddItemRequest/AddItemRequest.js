@@ -62,37 +62,28 @@ const AddItemRequest = (props) => {
         rowDataItemReq,
         gridHeight,
         onDeleteItem,
-        suppliers,
-        listAllSuppliers,
-        uoms,
-        currencies,
-        addresses,
-        glAccounts,
-        taxRecords,
         onCellValueChanged,
-        disabled,
-        isProject,
-        isSupplier,
-        listCategory,
-        isPrePurchaseOrderItems,
-        serviceCreate,
         groupTable,
         serverUrlTable,
         apiCreate,
         urlName,
+        paramName,
         groupName,
         priority,
+        params
 
 
     } = props;
 
     const ActionDelete = (params) => {
         const { data, agGridReact } = params;
+        // rowData is total data
+        // data is a record
         const { rowData } = agGridReact.props;
         return (
             <IconButton
                 size="small"
-                onClick={() => onDeleteItem(data.uuid, rowData)}
+                onClick={() => onDeleteItem(data.id, rowData)}
                 style={{ color: "red" }}
             >
                 <i className="fa fa-trash" />
@@ -119,32 +110,18 @@ const AddItemRequest = (props) => {
     const getColumnDefs = () => {
         if (apiCreate) {
             return getItemParameter(
-                suppliers,
-                uoms,
-                currencies,
-                addresses,
-                glAccounts,
-                taxRecords,
-                PRICE_TYPE_DEFAULT,
-                disabled,
-                isProject,
-                isSupplier,
-                listCategory,
-                isPrePurchaseOrderItems,
-                listAllSuppliers
+                rowDataItemReq
             );
         }
         if (groupTable) {
             return getItemGroup(
-                urlName,
-                priority
+                rowDataItemReq
             );
         }
 
         if (serverUrlTable) {
             return getItemServerUrl(
-                groupName,
-                priority
+                rowDataItemReq
             );
         }
     };

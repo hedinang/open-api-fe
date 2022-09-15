@@ -16,34 +16,34 @@ import CONFIG from "./services/urlConfig";
 
 LicenseManager.setLicenseKey(process.env.REACT_APP_AG_GRID_KEY);
 const cookies = new ReactCookies();
-axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        const status = error?.response?.status;
-        if (status === 401) {
-            notification(
-                "Notification",
-                "Your session has ended, Please login again.",
-                "error"
-            ).then(() => {
-                UserService.logout();
-            });
-        }
-        throw error;
-    }
-);
+// axios.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         const status = error?.response?.status;
+//         if (status === 401) {
+//             notification(
+//                 "Notification",
+//                 "Your session has ended, Please login again.",
+//                 "error"
+//             ).then(() => {
+//                 UserService.logout();
+//             });
+//         }
+//         throw error;
+//     }
+// );
 
-axios.interceptors.request.use(
-    (request) => {
-        const freeTokenPaths = [CONFIG.SSO_GET_TOKEN];
-        const token = cookies.get(process.env.SHARE_COOKIES_NAME);
-        if (token && !freeTokenPaths.includes(request.url)) {
-            request.headers.Authorization = `Bearer ${token}`;
-        }
-        return request;
-    },
-    (error) => Promise.reject(error)
-);
+// axios.interceptors.request.use(
+//     (request) => {
+//         const freeTokenPaths = [CONFIG.SSO_GET_TOKEN];
+//         const token = cookies.get(process.env.SHARE_COOKIES_NAME);
+//         if (token && !freeTokenPaths.includes(request.url)) {
+//             request.headers.Authorization = `Bearer ${token}`;
+//         }
+//         return request;
+//     },
+//     (error) => Promise.reject(error)
+// );
 
 setToLS("all-themes", themes.default);
 

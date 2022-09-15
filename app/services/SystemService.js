@@ -1,6 +1,7 @@
 import axios from "axios";
 import CONFIG from "./urlConfig";
 
+
 class SystemService {
     execute(url, data, headers, method) {
         switch (method) {
@@ -13,35 +14,47 @@ class SystemService {
         }
     }
 
-    getAllService() {
-        const url = CONFIG.LIST_SYSTEM_SERVICE_URL;
+    listService() {
+        const url = CONFIG.LIST_SERVICE;
+        return axios.get(url);
+    }
+    listGroup(id) {
+        const url = CONFIG.LIST_GROUP.replace("{id}", id);
         return axios.get(url);
     }
 
-    getPaymentTermByUuid(companyUuid, ptUuid) {
-        const url = CONFIG.GET_DETAILS_PAYMENT_TERM_URL.replace("{companyUuid}", companyUuid).replace("{ptUuid}", ptUuid);
+    listEncryption() {
+        const url = CONFIG.LIST_ENCRYPTION;
+        return axios.get(url);
+    }
+    listApiMethod() {
+        const url = CONFIG.LIST_API_METHOD
         return axios.get(url);
     }
 
-    createPaymentTerm(companyUuid, { ptName, ptDays, ptRemarks }) {
+    createService({ serviceName, serverUrl, group }) {
         const data = {
-            ptName,
-            ptDays,
-            ptRemarks
-        };
-        const url = CONFIG.CREATE_PAYMENT_TERM_URL.replace("{companyUuid}", companyUuid);
-        return axios.post(url, data);
-    }
+            name: serviceName,
+            serverUrl: serverUrl,
+            group: group,
+            status: 'ACTIVE'
 
-    updatePaymentTerm(companyUuid, { ptUuid, ptRemarks, ptName, ptDays }) {
+        }
+        const url = CONFIG.CREATE_SERVICE;
+        let a = axios.post(url, data);
+        return a
+    }
+    createApi({ serviceName, serverUrl, group }) {
         const data = {
-            ptUuid,
-            ptRemarks,
-            ptName,
-            ptDays,
-        };
-        const url = CONFIG.UPDATE_PAYMENT_TERM_URL.replace("{companyUuid}", companyUuid);
-        return axios.put(url, data);
+            name: serviceName,
+            serverUrl: serverUrl,
+            group: group,
+            status: 'ACTIVE'
+
+        }
+        const url = CONFIG.CREATE_SERVICE;
+        let a = axios.post(url, data);
+        return a
     }
 }
 

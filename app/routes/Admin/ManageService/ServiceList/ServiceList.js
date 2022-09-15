@@ -15,45 +15,50 @@ const ServiceList = () => {
     const { t } = useTranslation();
     const showToast = useToast();
     const history = useHistory();
-    const [serviceList, setServiceList] = useState([{
-        service: "Hyper SMS",
-        amountOfInstance: 2
-    },
+    const [serviceList, setServiceList] = useState([])
+    // const [serviceList, setServiceList] = useState([{
+    //     service: "Hyper SMS",
+    //     amountOfUrl: 2,
+    //     amountOfGroup: 4,
+    // },
 
-    {
-        service: "Nodejs",
-        amountOfInstance: 3
-    },
-    {
-        service: "Php",
-        amountOfInstance: 3
-    },
-    {
-        service: "Vinaphone SMS",
-        amountOfInstance: 4
-    }]);
+    // {
+    //     service: "Nodejs",
+    //     amountOfUrl: 3,
+    //     amountOfGroup: 4
+    // },
+    // {
+    //     service: "Php",
+    //     amountOfUrl: 3,
+    //     amountOfGroup: 4
+    // },
+    // {
+    //     service: "Vinaphone SMS",
+    //     amountOfUrl: 4,
+    //     amountOfGroup: 4
+    // }]);
 
     const columnDefs = [
         {
             headerName: t("Service"),
-            field: "service"
+            field: "name"
         },
         {
-            headerName: t("Amount of Instance"),
-            field: "amountOfInstance"
+            headerName: t("Amount of Server Url"),
+            field: "amountOfUrl"
+        },
+        {
+            headerName: t("Amount of Group"),
+            field: "amountOfGroup"
         }
     ];
 
     const retrieveServiceList = async () => {
-        try {
-            const response = await SystemService.getAllService();
-            if (response.data.status === "OK") {
-                setServiceList(response.data.data);
+        const response = await SystemService.listService();
+        if (response.data.status === "OK") {
+            setServiceList(response.data.data);
 
-            } else {
-                throw new Error(response.data.message);
-            }
-        } catch (error) {
+        } else {
             showToast("error", error.response.data.message);
         }
     };

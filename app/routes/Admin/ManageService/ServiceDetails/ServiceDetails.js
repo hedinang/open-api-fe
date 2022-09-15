@@ -108,24 +108,28 @@ const ServiceDetails = (props) => {
                         {
                             name: 'isTokenRide',
                             type: 'boolean',
+                            description: 'description',
                             default: true,
                             mandatory: true
                         },
                         {
                             name: 'appId',
                             type: 'string',
+                            description: 'description',
                             default: '220225017',
                             mandatory: true
                         },
                         {
                             name: 'version',
                             type: 'string',
+                            description: 'description',
                             default: 'v3',
                             mandatory: true
                         },
                         {
                             name: 'Content-Type',
                             type: 'string',
+                            description: 'description',
                             default: 'application/json',
                             mandatory: true
                         },

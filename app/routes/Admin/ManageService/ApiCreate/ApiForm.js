@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,14 +7,14 @@ import {
 import { formatDateTime } from "helper/utilities";
 import CUSTOM_CONSTANTS from "helper/constantsDefined";
 import Select from "react-select";
+import SystemService from "services/SystemService";
 const ApiForm = (props) => {
     const { t } = useTranslation();
     const {
         isCreate,
         isEdit,
-        methodList,
-        encryptList,
-        serviceList
+        values,
+        setFieldValue
     } = props;
     let isChange = false;
     if (isEdit || isCreate) {
@@ -24,6 +24,67 @@ const ApiForm = (props) => {
         if (data.value === "") return <div>{data.label}</div>
         return (<div>{"+" + data.value}</div>);
     };
+
+    const [serviceList, setServiceList] = useState([])
+    const [groupList, setGroupList] = useState([])
+    const [methodList, setMethodList] = useState([])
+    const [encryptList, setEncryptList] = useState([])
+    const changeApiName = (e) => {
+        setFieldValue('apiName', e.target.value)
+    }
+    const changeGroup = (e) => {
+        setFieldValue('group', e.value)
+    }
+    const changeSystem = (e) => {
+        setFieldValue('serviceId', e.value)
+        listGroup(e.value)
+    }
+
+    const changeEncryption = (e) => {
+        setFieldValue('encryption', e.value)
+    }
+    const changeMethod = (e) => {
+        setFieldValue('method', e.value)
+        listGroup(e.value)
+    }
+    const changeRequestBody = (e) => {
+        setFieldValue('defaultRequestBody', e.value)
+    }
+    const listApiMethod = async () => {
+        let response = await SystemService.listApiMethod();
+        if (response.data.status === "OK") {
+            let result = response.data.data
+            setMethodList(result)
+        }
+    }
+    const listEncryption = async () => {
+        let response = await SystemService.listEncryption();
+        if (response.data.status === "OK") {
+            let result = response.data.data
+            setEncryptList(result)
+        }
+    }
+    const listService = async () => {
+        let response = await SystemService.listService();
+        if (response.data.status === "OK") {
+            let result = response.data.data
+            setServiceList(result)
+            setGroupList([])
+        }
+    }
+    const listGroup = async (systemId) => {
+        let response = await SystemService.listGroup(systemId);
+        if (response.data.status === "OK") {
+            let result = response.data.data
+            setGroupList(result)
+        }
+    }
+    useEffect(() => {
+        listApiMethod()
+        listEncryption()
+        listService()
+    }, [])
+
     return (
         <>
             <Card>
@@ -41,8 +102,8 @@ const ApiForm = (props) => {
                                     <Col xs="8" md="8">
                                         <Input
                                             type="text"
-                                            value="/brandname/query"
-                                            disabled
+                                            value={values.apiName}
+                                            onChange={changeApiName}
                                         />
                                     </Col>
                                 </Row>
@@ -55,21 +116,13 @@ const ApiForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8">
                                         <Select
-                                            // components={{ SingleValue }}
-                                            // onChange={(e) => {
-                                            //     setAddress({ ...address, country: e.value });
-                                            // }}
+                                            onChange={(e) => changeSystem(e)}
                                             options={serviceList.map((element) => ({
-                                                label: element,
-                                                value: element
+                                                label: element.name,
+                                                value: element.id
                                             }))}
                                             isSearchable
                                             defaultValue={"Please select a server instance"}
-                                        // className={
-                                        //     classNames("form-validate", {
-                                        //         "is-invalid": !address.country && showValidate
-                                        //     })
-                                        // }
                                         />
                                     </Col>
                                 </Row>
@@ -85,20 +138,13 @@ const ApiForm = (props) => {
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
                                             // components={{ SingleValue }}
-                                            // onChange={(e) => {
-                                            //     setAddress({ ...address, country: e.value });
-                                            // }}
+                                            onChange={changeEncryption}
                                             options={encryptList.map((element) => ({
-                                                label: element,
-                                                value: element
+                                                label: element.name,
+                                                value: element.name
                                             }))}
                                             isSearchable
                                             defaultValue={"Please select a server instance"}
-                                        // className={
-                                        //     classNames("form-validate", {
-                                        //         "is-invalid": !address.country && showValidate
-                                        //     })
-                                        // }
                                         />
                                     </Col>
                                 </Row>
@@ -114,20 +160,13 @@ const ApiForm = (props) => {
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
                                             // components={{ SingleValue }}
-                                            // onChange={(e) => {
-                                            //     setAddress({ ...address, country: e.value });
-                                            // }}
+                                            onChange={changeMethod}
                                             options={methodList.map((element) => ({
-                                                label: element,
-                                                value: element
+                                                label: element.name,
+                                                value: element.name
                                             }))}
                                             isSearchable
                                             defaultValue={"Please select a server instance"}
-                                        // className={
-                                        //     classNames("form-validate", {
-                                        //         "is-invalid": !address.country && showValidate
-                                        //     })
-                                        // }
                                         />
                                     </Col>
                                 </Row>
@@ -140,28 +179,22 @@ const ApiForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
-                                            // components={{ SingleValue }}
-                                            // onChange={(e) => {
-                                            //     setAddress({ ...address, country: e.value });
-                                            // }}
-                                            options={methodList.map((element) => ({
-                                                label: element,
-                                                value: element
+                                            onChange={(e) => {
+                                                changeGroup(e);
+                                            }}
+                                            options={groupList.map((element) => ({
+                                                label: element.groupName,
+                                                value: element.id
                                             }))}
                                             isSearchable
                                             defaultValue={"Please select a server instance"}
-                                        // className={
-                                        //     classNames("form-validate", {
-                                        //         "is-invalid": !address.country && showValidate
-                                        //     })
-                                        // }
                                         />
                                     </Col>
                                 </Row>
                             </Col>
                             <Col xs="6" md="6">
                                 <HorizontalInput
-                                    name="requestBody"
+                                    name="defaultRequestBody"
                                     label={t("Default request body")}
                                     type="textarea"
                                     maxLength={3000}
@@ -171,6 +204,8 @@ const ApiForm = (props) => {
                                     // touched={touched.note}
                                     className="mb-0"
                                 // disabled={disabled}
+                                    // onChange={changeRequestBody}
+                                    
                                 />
                             </Col>
                         </Row>

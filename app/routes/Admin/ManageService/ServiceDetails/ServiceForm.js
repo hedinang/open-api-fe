@@ -43,18 +43,11 @@ const ServiceForm = (props) => {
 
                             </Col>
                             <Col xs="2" md="2"></Col>
-                            <Col xs="2" md="2">
+                            <Col xs="4" md="4">
                                 <Button
                                     className="mb-2 btn btn-primary" style={{ backgroundColor: "#fb9f3f" }}
                                 >
                                     {t("Authorize")}
-                                </Button>
-                            </Col>
-                            <Col xs="2" md="2">
-                                <Button
-                                    className="mb-2 btn btn-primary" color='red'
-                                >
-                                    {t("Add new")}
                                 </Button>
                             </Col>
                         </Row>
