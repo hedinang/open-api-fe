@@ -10,16 +10,16 @@ const ServiceGroupDetails = (props) => {
     const { t } = useTranslation();
     return (
         <Col lg={12} style={{ paddingTop: '10px' }}>
-            <div style={{ fontSize: '24px' }}>{groupService.name}</div>
-            {groupService.api.map(e => {
+            <div style={{ fontSize: '24px' }}>{groupService.groupName}</div>
+            {groupService.apiDtoList.map(e => {
                 return <ServiceDetailLine
-                    title={e.title}
+                    title={e.name}
                     method={e.method}
                     // defaultExpanded
-                    borderTopColor={e.borderTopColor}
-                    encrypt={e.encrypt}
-                    requestHeaders={e.requestHeaders}
-                    requestParams={e.requestParams}
+                    // borderTopColor={e.borderTopColor}
+                    encrypt={e.encryptionType}
+                    requestHeaders={e.params}
+                    // requestParams={e.requestParams}
                     serverUrl={serverUrl}
                     requestBody={e.requestBody}
                     appKey={e.appKey}

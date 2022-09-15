@@ -33,28 +33,12 @@ const DefaultSidebar = () => {
     const [companyLogo, setCompanyLogo] = useState();
 
     const getItems = () => {
-        const rawRoot = {
-            "uuid": "908d3553-4714-4f3c-892a-8f8359830636",
-            "featureName": "Developer Work Request",
-            "featureCode": "dwr",
-            "category": "Requisitions",
-            "profile": "USER",
-            "subCategory": "Requisitions",
-            "moduleCode": "DEVELOPER_MODULE"
-        }
         const flexibleRoute = RouteService.getRoutes();
         setData((prevStates) => ({
             ...prevStates,
             items: flexibleRoute
         }));
         // }
-    };
-
-    const getCompanies = () => {
-        setData((prevStates) => ({
-            ...prevStates,
-            companies: authReducer.userDetails.companies
-        }));
     };
 
     useEffect(() => {

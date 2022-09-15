@@ -57,12 +57,12 @@ const ServiceCreate = (props) => {
         switch (tableName) {
             case 'serverUrl':
                 items.push({
-                    uuid: uuid()
+                    id: uuid()
                 })
                 break;
             case 'group':
                 items.push({
-                    uuid: uuid()
+                    id: uuid()
                 })
                 break;
             default:

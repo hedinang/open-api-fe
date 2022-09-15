@@ -24,10 +24,12 @@ export const BASE_ENTITIES = `${BASE_URL + ENTITIES_PREFIX}`;
 
 const URL_CONFIG = {
     CREATE_SERVICE: `${BASE_URL}/service/create`,
+    DETAIL_SERVICE: `${BASE_URL}/service/detail/{id}`,
     LIST_SERVICE: `${BASE_URL}/service/list`,
     LIST_API_METHOD: `${BASE_URL}/method/list`,
     LIST_ENCRYPTION: `${BASE_URL}/encryption/list`,
     LIST_GROUP: `${BASE_URL}/service/group/list/{id}`,
+    CREATE_API: `${BASE_URL}/api/create`,
     
 
 

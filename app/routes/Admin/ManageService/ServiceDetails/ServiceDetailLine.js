@@ -19,6 +19,7 @@ import ServiceRequestParam from './ServiceRequestParam'
 import SystemService from "services/SystemService";
 import CryptoJS from 'crypto-js'
 import fetchToCurl from 'fetch-to-curl';
+import { Formik } from "formik";
 
 const useStyles = makeStyles({
     "custom-nav": {
@@ -127,37 +128,45 @@ const ServiceDetailLine = (props) => {
         appKey
     } = props;
     let [responseBody, setResponseBody] = useState('')
-    let [header, setHeader] = useState(requestHeaders)
+    // let [header, setHeader] = useState(requestHeaders)
     let [param, setParam] = useState(requestParams)
     let [curl, setCurl] = useState('')
+    const initialValues = {
+        requestBody: requestBody,
+        requestHeaders: requestHeaders,
+
+    }
 
 
-    let onChangeHeader = (key, value) => {
-        header.forEach(e => {
-            if (e.name === key) e.default = value.target.value
+    let onChangeHeader = (key, value, setFieldValue,) => {
+        let tmp = [...initialValues.requestHeaders]
+        tmp.forEach(e => {
+            if (e.paramName === key) e.defaultValue = value.target.value
         });
-        setHeader((prevState) => [...prevState])
+        setFieldValue(requestHeaders, tmp)
+        // setHeader(tmp)
     }
     let onChangeParam = (key, value) => {
         param.forEach(e => {
-            if (e.name === key) e.default = value.target.value
+            if (e.name === key) e.defaultValue = value.target.value
         });
         setParam((prevState) => [...prevState])
     }
 
 
-    let requestUrl = serverUrl + title
-    let execute = async () => {
-        let data = JSON.parse(requestBody)
-        let headers = requestHeaders.reduce(
-            (obj, item) => Object.assign(obj, { [item.name]: item.default }), {});
-        headers.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzgiLCJpYXQiOjE2NjI2NTc2NDQsImV4cCI6MTY2MzI2MjQ0NH0.NoNZYTUtqcdTCOk0TCpzDBUrG71UUMPs0iCl9VtIIUF3Mc59LfPWSEw99pRAF2xwpw7rgzT8CMpGDKwERIpKag"
+    let requestUrl = serverUrl + '/' + title
+    let execute = async (values) => {
+        let data = JSON.parse(values.requestBody)
+        let headers = values.requestHeaders.reduce(
+            (obj, item) => Object.assign(obj, { [item.paramName]: item.defaultValue }), {});
+        headers.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzgiLCJpYXQiOjE2NjMyNDcyMDEsImV4cCI6MTY2Mzg1MjAwMX0.gCuZhLT9w9hxM0IFJp_n4BpRUbEnD5H1weohz8surf5rR7mEdHWvJNk11t2BLny0VAL0zXi237DGj1qE0dadcA"
         headers.isTokenRide = headers.isTokenRide.toString()
         const config = {
             headers: headers
         };
         // check encrypt
-        let encrytion = checkEncrypt(encrypt, requestBody, headers, data, appKey)
+        let appKey = headers.appKey
+        let encrytion = checkEncrypt(encrypt, values.requestBody, headers, data, appKey)
         headers = encrytion.headers
         data = encrytion.data
 
@@ -176,7 +185,7 @@ const ServiceDetailLine = (props) => {
     let [isExecute, setIsExecute] = useState(false)
     let checkEncrypt = (encrypt, requestBody, headers, data, appKey) => {
         switch (encrypt) {
-            case 'token':
+            case 'MD5':
                 var str = requestBody + appKey
                 var sign = CryptoJS.MD5(str) + "";
                 headers.sign = sign
@@ -197,125 +206,146 @@ const ServiceDetailLine = (props) => {
         }
 
     }
+    const changeBodyRequest = (e, setFieldValue) => {
+        setFieldValue('requestBody', e.target.value)
+    }
 
     return (
-        <Accordion style={{ border: `2px solid ${borderTopColor}` }} defaultExpanded={defaultExpanded}>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                style={{ borderBottom: `2px solid ${borderTopColor}` }}
-            >
-                <Typography style={{ width: '100%', }}>
-                    <Row xs='12'>
-                        <Col xs='4'>
-                            <Button className="btn btn-primary" style={{
-                                color: 'white', backgroundColor: '#49cc90'
-                            }}>
-                                {method}
-                            </Button>
-                            <span style={{ paddingLeft: '20px' }}>{title}</span>
-                        </Col>
-                        <Col xs='5'>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={() => { }}
 
-                        </Col>
-                        <Col xs='2'>
-                            {encrypt ?
-                                <Button className="btn btn-primary" style={{ backgroundColor: 'red', color: 'white', }}>ENCRYPT</Button> : <></>}
-                        </Col>
-                        <Col xs='1'>
-                        </Col>
-                    </Row>
-                </Typography>
-            </AccordionSummary>
-            <AccordionDetails style={{ display: "block", padding: 0 }}>
-                <Row xs="12" className="d-flex mx-0" >
-                    <Col xs="12">
-                        <Row xs="12" className="d-flex mx-0">
-                            <Col xs="12">
-                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                    <Col xs='2'>
-                                        <Button style={{
-                                            color: 'black', fontSize: '14px', backgroundColor: 'white'
-                                            , borderTop: 'none', borderLeft: 'none', borderRight: 'none'
-                                            , borderWidth: '5px', borderColor: '#49cc90', borderRadius: 'unset'
+        >
+            {({
+                values, setFieldValue
+            }) => {
+
+                return (
+                    <Accordion style={{ border: `2px solid ${borderTopColor}` }} defaultExpanded={defaultExpanded}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                            style={{ borderBottom: `2px solid ${borderTopColor}` }}
+                        >
+                            <Typography style={{ width: '100%', }}>
+                                <Row xs='12'>
+                                    <Col xs='4'>
+                                        <Button className="btn btn-primary" style={{
+                                            color: 'white', backgroundColor: '#49cc90'
                                         }}>
-                                            Parameters
+                                            {method}
                                         </Button>
+                                        <span style={{ paddingLeft: '20px' }}>{title}</span>
                                     </Col>
-                                    <Col xs='9'>
+                                    <Col xs='5'>
+
+                                    </Col>
+                                    <Col xs='2'>
+                                        {encrypt ?
+                                            <Button className="btn btn-primary" style={{ backgroundColor: 'red', color: 'white', }}>ENCRYPT</Button> : <></>}
                                     </Col>
                                     <Col xs='1'>
-                                        <Button btn btn-primary style={{
-                                            color: 'white', backgroundColor: '#4ecb93'
-                                        }}>
-                                            Edit
-                                        </Button>
                                     </Col>
                                 </Row>
-                            </Col>
-                        </Row>
-                        <Row xs="12" className="d-flex mx-0" style={{
-                            backgroundColor: '#e9f6f000'
-                        }}>
-                            <Col xs="12">
-                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                    <Col xs='2'>
-                                        Name
-                                    </Col>
-                                    <Col xs='5'>
-                                        Input
-                                    </Col>
-                                    <Col xs='5'>
-                                        Description
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        {header.map(e => <ServiceRequestHeader requestHeader={e} onChangeHeader={onChangeHeader} />)}
-                        {param.map(e => <ServiceRequestParam requestParam={e} onChangeParam={onChangeParam} />)}
-                        <Row xs="12" className="d-flex mx-0">
-                            <div style={{ fontSize: '14px' }}>Request body</div>
-                        </Row>
-                        <Row xs="12" className="d-flex mx-0">
-                            <Input style={{ color: 'black', height: '300px' }}
-                                type="textarea"
-                                value={requestBody}
-                                height='100px'
-                            />
-                        </Row>
-                        <Row xs="12" className="d-flex mx-0" style={{
-                        }}>
-                            <Col xs="12">
-                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                    <Col xs='6'>
-                                        <Button style={{
-                                            color: 'white', fontSize: '14px', backgroundColor: '#4990e2', width: '100%'
-                                        }}
-                                            onClick={execute}
-                                        >
-                                            Execute
-                                        </Button>
-                                    </Col>
-                                    <Col xs='6'>
-                                        <Button style={{
-                                            color: 'black', fontSize: '14px', backgroundColor: 'white', width: '100%'
-                                        }}>
-                                            Clear
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        {
-                            isExecute ? <RequestBody curl={curl} requestUrl={requestUrl} responseBody={responseBody} /> : <></>
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails style={{ display: "block", padding: 0 }}>
+                            <Row xs="12" className="d-flex mx-0" >
+                                <Col xs="12">
+                                    <Row xs="12" className="d-flex mx-0">
+                                        <Col xs="12">
+                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                <Col xs='2'>
+                                                    <Button style={{
+                                                        color: 'black', fontSize: '14px', backgroundColor: 'white'
+                                                        , borderTop: 'none', borderLeft: 'none', borderRight: 'none'
+                                                        , borderWidth: '5px', borderColor: '#49cc90', borderRadius: 'unset'
+                                                    }}>
+                                                        Parameters
+                                                    </Button>
+                                                </Col>
+                                                <Col xs='9'>
+                                                </Col>
+                                                <Col xs='1'>
+                                                    <Button btn btn-primary style={{
+                                                        color: 'white', backgroundColor: '#4ecb93'
+                                                    }}>
+                                                        Edit
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                    <Row xs="12" className="d-flex mx-0" style={{
+                                        backgroundColor: '#e9f6f000'
+                                    }}>
+                                        <Col xs="12">
+                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                <Col xs='2'>
+                                                    Name
+                                                </Col>
+                                                <Col xs='4'>
+                                                    Input
+                                                </Col>
+                                                <Col xs='1'>
+                                                    Mandatory
+                                                </Col>
+                                                <Col xs='5'>
+                                                    Description
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                    {values.requestHeaders.map(e => <ServiceRequestHeader requestHeader={e}
+                                        onChangeHeader={onChangeHeader} setFieldValue={setFieldValue} />)}
+                                    {/* {param.map(e => <ServiceRequestParam requestParam={e} onChangeParam={onChangeParam} />)} */}
+                                    <Row xs="12" className="d-flex mx-0">
+                                        <div style={{ fontSize: '14px' }}>Request body</div>
+                                    </Row>
+                                    <Row xs="12" className="d-flex mx-0">
+                                        <Input style={{ color: 'black', height: '300px' }}
+                                            type="textarea"
+                                            value={values.requestBody}
+                                            height='100px'
+                                            onChange={e => changeBodyRequest(e, setFieldValue)}
+                                        />
+                                    </Row>
+                                    <Row xs="12" className="d-flex mx-0" style={{
+                                    }}>
+                                        <Col xs="12">
+                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                <Col xs='6'>
+                                                    <Button style={{
+                                                        color: 'white', fontSize: '14px', backgroundColor: '#4990e2', width: '100%'
+                                                    }}
+                                                        onClick={e => execute(values)}
+                                                    >
+                                                        Execute
+                                                    </Button>
+                                                </Col>
+                                                <Col xs='6'>
+                                                    <Button style={{
+                                                        color: 'black', fontSize: '14px', backgroundColor: 'white', width: '100%'
+                                                    }}>
+                                                        Clear
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                    {
+                                        isExecute ? <RequestBody curl={curl} requestUrl={requestUrl} responseBody={responseBody} /> : <></>
 
-                        }
-                    </Col>
-                </Row>
+                                    }
+                                </Col>
+                            </Row>
 
-            </AccordionDetails>
-        </Accordion>
+                        </AccordionDetails>
+                    </Accordion>
+                )
+            }}
+        </Formik>
     );
 };
 

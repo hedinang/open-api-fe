@@ -4,10 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import {
     Row,
     Col,
-    Input
+    Input,
+    // CustomInput
 } from "components";
+import { Checkbox } from "primereact/checkbox";
 const ServiceRequestHeader = (props) => {
-    let { requestHeader, onChangeHeader } = props
+    let { requestHeader, onChangeHeader, setFieldValue } = props
     let [header, setHeader] = useState(requestHeader)
     useEffect(() => {
         setHeader(requestHeader.default)
@@ -18,17 +20,33 @@ const ServiceRequestHeader = (props) => {
             <Col xs="12">
                 <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
                     <Col xs='2'>
-                        {requestHeader.name} <br /> {requestHeader.type}<br /> (header)
+                        {requestHeader.paramName} <br /> {requestHeader.dataType}<br /> ({requestHeader.paramType})
                     </Col>
-                    <Col xs='5'>
-                        <Input style={{ color: 'black', }}
-                            type="text"
-                            value={header}
-                            onChange={e => onChangeHeader(requestHeader.name, e)}
+                    <Col xs='4'>
+                        {
+                            requestHeader.autoGenerate ?
+                                <Input style={{ color: 'black', }}
+                                    type="text"
+                                    value="AUTO GENERATE"
+                                    disabled
+                                // onChange={e => onChangeHeader(requestHeader.paramName, e, setFieldValue)}
+                                /> :
+                                <Input style={{ color: 'black', }}
+                                    type="text"
+                                    value={requestHeader.defaultValue}
+                                    onChange={e => onChangeHeader(requestHeader.paramName, e, setFieldValue)}
+                                />
+                        }
+                    </Col>
+                    <Col xs='1'>
+                        <Checkbox
+                            type="checkbox"
+                            checked={requestHeader.mandatory}
+                            disabled
                         />
                     </Col>
                     <Col xs='5'>
-                        <div>{requestHeader.description}</div>
+                        <div>{requestHeader.note}</div>
                     </Col>
                 </Row>
             </Col>

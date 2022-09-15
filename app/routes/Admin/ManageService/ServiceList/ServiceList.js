@@ -73,7 +73,11 @@ const ServiceList = () => {
     };
 
     const onRowDoubleClick = (event) => {
-        history.push('service-detail/');
+        const { id } = event && event.data;
+        history.push({
+            pathname: 'service-detail',
+            search: `?id=${id}`
+        });
     };
 
     return (

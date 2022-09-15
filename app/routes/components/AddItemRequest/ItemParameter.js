@@ -14,7 +14,8 @@ const getItemParameter = (
     paramType,
     defaultValue,
     mandatory,
-    note
+    note,
+    autoGenerate
 ) => [
         {
             headerName: i18next.t("action"),
@@ -60,7 +61,14 @@ const getItemParameter = (
             field: "note",
             editable: true,
             width: 400
-        }
+        },
+        {
+            headerName: i18next.t("autoGenerate"),
+            field: "autoGenerate",
+            editable: true,
+            width: 150
+
+        },
     ];
 
 export default getItemParameter;

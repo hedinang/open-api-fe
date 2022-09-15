@@ -31,7 +31,6 @@ const ServiceDetails = (props) => {
         isActive: false
     });
     const [backupForm, setBackupForm] = useState({});
-    const currentCompany = useCurrentCompany();
 
     const updateForm = (name, value) => {
         setForm({
@@ -240,71 +239,25 @@ const ServiceDetails = (props) => {
         }
     ]);
     let [serverList, setServerList] = useState(["https://openapi-uat.hypersms.vn", "https://openapi.viettel.hypersms.vn"])
+    let [dataDetail, setDataDetail] = useState()
 
-
-
+    const getServiceDetail = async (serviceId) => {
+        let response = await SystemService.detailService(serviceId)
+        if (response.data.status === "OK") {
+            // setServiceList(response.data.data);
+            setDataDetail(response.data.data)
+            console.log('asas');
+        } else {
+            showToast("error", error.response.data.message);
+        }
+    }
     useEffect(() => {
-        // Retrieve uuid of payment term if is edit
-        const query = new URLSearchParams(props.location.search);
-        const uuid = query.get("uuid");
-        if (uuid) {
-            setIsCreate(false);
-            setIsEdit(false);
-        }
+        const query = new URLSearchParams(location.search);
+        const id = query.get("id");
+        getServiceDetail(id)
+        console.log('aaa')
+    }, [])
 
-        // Retrieve company uuid
-        if (!_.isEmpty(currentCompany)) {
-            setDetailsStates((prevStates) => ({
-                ...prevStates,
-                companyUuid: currentCompany.companyUuid,
-                uuid
-            }));
-        }
-    }, [currentCompany]);
-
-    // Get details of payment terms
-    const getPaymentTermsDetail = async () => {
-        try {
-            if (detailsStates.companyUuid && detailsStates.uuid) {
-                const response = await SystemService.getPaymentTermByUuid(detailsStates.companyUuid, detailsStates.uuid);
-                if (response.data.status === "OK") {
-                    const {
-                        ptRemarks,
-                        ptName,
-                        ptDays,
-                        createdByName,
-                        createdOn
-                    } = response.data.data;
-                    setForm((prevStates) => ({
-                        ...prevStates,
-                        ptRemarks,
-                        ptUuid: detailsStates.uuid,
-                        ptName,
-                        ptDays,
-                        createdByName,
-                        createdOn
-                    }));
-                    setBackupForm((prevStates) => ({
-                        ...prevStates,
-                        ptRemarks,
-                        ptUuid: detailsStates.uuid,
-                        ptName,
-                        ptDays,
-                        createdByName,
-                        createdOn
-                    }));
-                } else {
-                    throw new Error(response.data.message);
-                }
-            }
-        } catch (error) {
-            showToast("error", error.message);
-        }
-    };
-
-    useEffect(() => {
-        getPaymentTermsDetail();
-    }, [detailsStates]);
 
     const onBackButtonPressHandler = () => {
         if (isEdit) {
@@ -313,6 +266,43 @@ const ServiceDetails = (props) => {
         }
     };
     const initialValues = {
+        serverName: '',
+        serverUrl: '',
+        groupDtoList: [
+            {
+                id: 'dsds',
+                groupName: 'dsds',
+                apiDtoList: [{
+                    id: 'dsds',
+                    name: 'v3/app/brandname/query',
+                    method: 'POST',
+                    encryptionType: 'MD5',
+                    requestBody: `{
+  "brandName":"",
+  "code":"",
+  "currPage": 1,
+  "pageSize": 30
+}
+`,
+                    params: [
+                        {
+                            paramName: 'isTokenRide',
+                            paramType: 'header',
+                            dataType: 'string',
+                            defaultValue: true,
+                            mandatory: true,
+                            note: 'bbbb',
+                            autoGenerate: true
+                        }
+                    ]
+                }]
+            }
+        ],
+        authorize: [{
+            id: 'aa',
+            key: 'token',
+            value: 'aaaaaaaaaaa'
+        }]
 
     }
     return (
@@ -321,42 +311,55 @@ const ServiceDetails = (props) => {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={() => { }}
+
                 >
-                    <Form>
-                        <Row className="mb-1">
-                            <Col lg={12}>
-                                <HeaderMain
-                                    title={(t("Service Details"))}
-                                    className="mb-3 mb-lg-3"
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="mb-5">
-                            <Col lg={12}>
-                                <ServiceForm
-                                    isCreate={isCreate}
-                                    isEdit={isEdit}
-                                    form={form}
-                                    updateForm={updateForm}
-                                    headerName={t("General Information")}
-                                    serverList={serverList}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="mb-5">
-                            {groupServiceList.map(e => < ServiceGroupDetails groupService={e} serverUrl={serverList[0]} />)}
-                        </Row>
-                        <StickyFooter>
-                            <Row className="justify-content-between mx-0 px-3">
-                                <Button
-                                    className="mb-2 btn btn-secondary"
-                                    onClick={() => (isEdit ? onBackButtonPressHandler() : history.goBack())}
-                                >
-                                    {t("Back")}
-                                </Button>
-                            </Row>
-                        </StickyFooter>
-                    </Form>
+                    {({
+                        values, setFieldValue
+                    }) => {
+
+                        return (
+                            <Form>
+                                <Row className="mb-1">
+                                    <Col lg={12}>
+                                        <HeaderMain
+                                            title={(t("Service Details"))}
+                                            className="mb-3 mb-lg-3"
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="mb-5">
+                                    <Col lg={12}>
+                                        <ServiceForm
+                                            isCreate={isCreate}
+                                            isEdit={isEdit}
+                                            // form={form}
+                                            // updateForm={updateForm}
+                                            headerName={t("General Information")}
+                                            serverList={serverList}
+                                            values={values}
+                                            setFieldValue={setFieldValue}
+                                            dataDetail={dataDetail}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="mb-5">
+                                    {dataDetail?.groupDtoList?.map(e => < ServiceGroupDetails groupService={e}
+
+                                        serverUrl={values.serverUrl} />)}
+                                </Row>
+                                <StickyFooter>
+                                    <Row className="justify-content-between mx-0 px-3">
+                                        <Button
+                                            className="mb-2 btn btn-secondary"
+                                            onClick={() => (isEdit ? onBackButtonPressHandler() : history.goBack())}
+                                        >
+                                            {t("Back")}
+                                        </Button>
+                                    </Row>
+                                </StickyFooter>
+                            </Form>
+                        )
+                    }}
                 </Formik>
             </Container>
         </>

@@ -9,6 +9,7 @@ import getItemParameter from "./ItemParameter";
 import getItemGroup from "./ItemGroup";
 import getItemServerUrl from "./ItemServerUrl";
 import SelectWithHorizontalLine from "./SelectWithHorizontalLine";
+import getItemAuthorize from "./ItemAuthorize";
 
 const defaultColDef = {
     editable: false,
@@ -70,7 +71,8 @@ const AddItemRequest = (props) => {
         paramName,
         groupName,
         priority,
-        params
+        params,
+        authorizeTable
 
 
     } = props;
@@ -121,6 +123,11 @@ const AddItemRequest = (props) => {
 
         if (serverUrlTable) {
             return getItemServerUrl(
+                rowDataItemReq
+            );
+        }
+        if (authorizeTable) {
+            return getItemAuthorize(
                 rowDataItemReq
             );
         }

@@ -14,13 +14,8 @@ const SidebarMiddleNav = ({ items, userDetails, permissionReducer }) => {
         icon: 'fa fa-fw fa-home',
         title: 'Service Create',
         path: '/system-service/service-create'
-    }, {
-        id: '1',
-        icon: 'fa fa-fw fa-home',
-        title: 'Service Detail',
-        path: '/system-service/service-detail'
-    }
-        , {
+    },
+    {
         id: '1',
         icon: 'fa fa-fw fa-home',
         title: 'Api Create',

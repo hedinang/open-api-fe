@@ -1,4 +1,5 @@
 import axios from "axios";
+import { method } from "lodash";
 import CONFIG from "./urlConfig";
 
 
@@ -44,15 +45,22 @@ class SystemService {
         let a = axios.post(url, data);
         return a
     }
-    createApi({ serviceName, serverUrl, group }) {
+    detailService(serviceId) {
+        const url = CONFIG.DETAIL_SERVICE.replace('{id}', serviceId);
+        let a = axios.get(url);
+        return a
+    }
+    createApi({ apiName, method, group, encryption, defaultRequestBody, params }) {
         const data = {
-            name: serviceName,
-            serverUrl: serverUrl,
-            group: group,
+            name: apiName,
+            method: method,
+            groupId: group,
+            encryptionType: encryption,
+            requestBody: defaultRequestBody,
+            params: params,
             status: 'ACTIVE'
-
         }
-        const url = CONFIG.CREATE_SERVICE;
+        const url = CONFIG.CREATE_API;
         let a = axios.post(url, data);
         return a
     }

@@ -12,7 +12,7 @@ const ServiceRoutes = [
         path: "/system-service/service-list", isProtected: false, name: i18next.t("ServiceList"), Component: ServiceList, render: true
     },
     {
-        path: "/system-service/service-detail", isProtected: false, name: i18next.t("ServiceDetail"), Component: ServiceDetails, render: true
+        path: "/system-service/service-detail", isProtected: false, key: 'id', name: i18next.t("ServiceDetail"), Component: ServiceDetails, render: true
     },
     {
         path: "/system-service/api-create", isProtected: false, name: i18next.t("ApiCreate"), Component: ApiCreate, render: true

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,85 +7,102 @@ import {
 import { formatDateTime } from "helper/utilities";
 import CUSTOM_CONSTANTS from "helper/constantsDefined";
 import Select from "react-select";
+import { AddItemRequest } from "routes/components";
+import { Formik } from "formik";
+import uuid from 'uuid/v4';
 const ServiceForm = (props) => {
     const { t } = useTranslation();
     const {
         isCreate,
         isEdit,
-        serverList
+        serverList,
+        authorize,
+        setFieldValue,
+        values,
+        dataDetail
     } = props;
     let isChange = false;
     if (isEdit || isCreate) {
         isChange = true;
     }
-    const SingleValue = ({ data, ...props }) => {
-        if (data.value === "") return <div>{data.label}</div>
-        return (<div>{"+" + data.value}</div>);
+    const changeServerUrl = (e) => {
+        setFieldValue('serverUrl', e.value)
+    }
+    const addItemManual = (totalData, tableName) => {
+        let items = [...totalData]
+        items.push({
+            id: uuid()
+        })
+        setFieldValue(tableName, items)
+    };
+    const onDeleteItemReq = (id, rowData, tableName) => {
+        rowData = rowData.filter(e => e.id !== id)
+        setFieldValue(tableName, rowData)
     };
     return (
         <>
+
             <Card>
                 <CardBody className="p-4">
                     <FormGroup>
                         <Row xs="12" className="d-flex mx-0">
-                            <Col xs="2" md="2">
-                                <Label
-                                >
-                                    {t("Service Name")}
-                                </Label>
-                            </Col>
-                            <Col xs="4" md="4">
-                                <Input
-                                    type="text"
-                                    value="Hyper SMS"
-                                    disabled
-                                />
+                            <Col xs="6" md="6">
+                                <Row xs="12" className="d-flex mx-0 mt-5">
+                                    <Col xs="4" md="4">
+                                        <Label
+                                        >
+                                            {t("Service Name")}
+                                        </Label>
+                                    </Col>
+                                    <Col xs="8" md="8">
+                                        <Input
+                                            type="text"
+                                            value={dataDetail?.name}
+                                            disabled
+                                        />
 
+                                    </Col>
+                                </Row>
+                                <Row xs="12" className="d-flex mx-0 mt-2">
+                                    <Col xs="4" md="4">
+                                        <label>
+                                            {t("Server Url")}
+                                        </label>
+                                    </Col>
+                                    <Col xs="8" md="8" className="label-required">
+                                        <Select
+                                            onChange={(e) => changeServerUrl(e)}
+                                            options={dataDetail?.serverUrl?.map((element) => ({
+                                                label: element.urlName,
+                                                value: element.urlName
+                                            }))}
+                                            isSearchable
+                                            defaultValue={"Please select a server instance"}
+                                        />
+                                    </Col>
+                                </Row>
                             </Col>
-                            <Col xs="2" md="2"></Col>
-                            <Col xs="4" md="4">
+                            <Col xs="6" md="6">
                                 <Button
-                                    className="mb-2 btn btn-primary" style={{ backgroundColor: "#fb9f3f" }}
+                                    color="primary"
+                                    onClick={() => addItemManual(values.authorize, 'authorize')}
+                                    style={{ height: 34, marginBottom: '5px' }}
                                 >
-                                    {t("Authorize")}
+                                    <span className="mr-1">+</span>
+                                    <span>{t("Add authorize")}</span>
                                 </Button>
-                            </Col>
-                        </Row>
-                        <Row xs="12" className="d-flex mx-0">
-                            <Col xs="2" md="2">
-                                <label
-                                // htmlFor="userName"
-                                // className={classes.inputText1}
-                                >
-                                    {t("Server Url")}
-                                </label>
-                            </Col>
-                            <Col xs="4" md="4" className="label-required">
-                                <Select
-                                    // components={{ SingleValue }}
-                                    // onChange={(e) => {
-                                    //     setAddress({ ...address, country: e.value });
-                                    // }}
-                                    options={serverList.map((element) => ({
-                                        label: element,
-                                        value: element
-                                    }))}
-                                    isSearchable
-                                    defaultValue={"Please select a server instance"}
-                                // className={
-                                //     classNames("form-validate", {
-                                //         "is-invalid": !address.country && showValidate
-                                //     })
-                                // }
+                                <AddItemRequest
+                                    rowDataItemReq={values.authorize}
+                                    onDeleteItem={(id, rowData) => onDeleteItemReq(id, rowData, 'authorize')}
+                                    authorizeTable={true}
+                                    floatingFilter={true}
                                 />
-                            </Col>
-                            <Col xs="3" md="3"></Col>
-                            <Col xs="3" md="3">
                             </Col>
                         </Row>
                     </FormGroup>
                 </CardBody>
             </Card>
+
         </>
     );
 };

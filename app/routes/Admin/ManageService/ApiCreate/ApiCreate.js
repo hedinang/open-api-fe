@@ -25,7 +25,7 @@ const ServiceCreate = (props) => {
     const initialValues = {}
 
     const onSavePressHandler = async (values) => {
-        let response = await SystemService.createService(values)
+        let response = await SystemService.createApi(values)
         if (response.data.status === "OK") {
             // back list screen
             showToast("success", response.data.message);
