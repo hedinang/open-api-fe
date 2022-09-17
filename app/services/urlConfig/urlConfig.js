@@ -30,6 +30,8 @@ const URL_CONFIG = {
     LIST_ENCRYPTION: `${BASE_URL}/encryption/list`,
     LIST_GROUP: `${BASE_URL}/service/group/list/{id}`,
     CREATE_API: `${BASE_URL}/api/create`,
+    DETAIL_API: `${BASE_URL}/api/detail/{id}`,
+    UPDATE_API: `${BASE_URL}/api/update/{id}`,
     
 
 

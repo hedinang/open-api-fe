@@ -61,8 +61,25 @@ class SystemService {
             status: 'ACTIVE'
         }
         const url = CONFIG.CREATE_API;
-        let a = axios.post(url, data);
+        return axios.post(url, data);
+    }
+    detailApi(apiId) {
+        const url = CONFIG.DETAIL_API.replace('{id}', apiId);
+        let a = axios.get(url);
         return a
+    }
+    updateApi({ apiId, encryptionType, groupId, method, name, requestBody, params, serviceId }) {
+        const data = {
+            name: name,
+            method: method,
+            groupId: groupId,
+            encryptionType: encryptionType,
+            requestBody: requestBody,
+            params: params,
+            status: 'ACTIVE'
+        }
+        const url = CONFIG.UPDATE_API.replace('{id}', apiId);;
+        return axios.put(url, data);
     }
 }
 

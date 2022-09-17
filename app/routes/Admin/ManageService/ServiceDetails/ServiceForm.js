@@ -15,9 +15,9 @@ const ServiceForm = (props) => {
     const {
         isCreate,
         isEdit,
-        serverList,
         authorize,
         setFieldValue,
+        setAuthorize,
         values,
         dataDetail
     } = props;
@@ -33,11 +33,11 @@ const ServiceForm = (props) => {
         items.push({
             id: uuid()
         })
-        setFieldValue(tableName, items)
+        setAuthorize(items)
     };
     const onDeleteItemReq = (id, rowData, tableName) => {
         rowData = rowData.filter(e => e.id !== id)
-        setFieldValue(tableName, rowData)
+        setAuthorize(rowData)
     };
     return (
         <>
@@ -85,14 +85,14 @@ const ServiceForm = (props) => {
                             <Col xs="6" md="6">
                                 <Button
                                     color="primary"
-                                    onClick={() => addItemManual(values.authorize, 'authorize')}
+                                    onClick={() => addItemManual(authorize, 'authorize')}
                                     style={{ height: 34, marginBottom: '5px' }}
                                 >
                                     <span className="mr-1">+</span>
                                     <span>{t("Add authorize")}</span>
                                 </Button>
                                 <AddItemRequest
-                                    rowDataItemReq={values.authorize}
+                                    rowDataItemReq={authorize}
                                     onDeleteItem={(id, rowData) => onDeleteItemReq(id, rowData, 'authorize')}
                                     authorizeTable={true}
                                     floatingFilter={true}

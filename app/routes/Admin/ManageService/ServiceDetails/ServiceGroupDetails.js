@@ -6,12 +6,12 @@ import {
 } from "components";
 import ServiceDetailLine from "./ServiceDetailLine";
 const ServiceGroupDetails = (props) => {
-    const { groupService, serverUrl, requestBody } = props
+    const { groupService, serverUrl, requestBody, authorize } = props
     const { t } = useTranslation();
     return (
         <Col lg={12} style={{ paddingTop: '10px' }}>
             <div style={{ fontSize: '24px' }}>{groupService.groupName}</div>
-            {groupService.apiDtoList.map(e => {
+            {groupService?.apiDtoList?.map(e => {
                 return <ServiceDetailLine
                     title={e.name}
                     method={e.method}
@@ -23,6 +23,8 @@ const ServiceGroupDetails = (props) => {
                     serverUrl={serverUrl}
                     requestBody={e.requestBody}
                     appKey={e.appKey}
+                    authorize={authorize}
+                    apiId={e.id}
                 // disabled={!purchaseDetailsStates.isEdit}
                 />
             })}

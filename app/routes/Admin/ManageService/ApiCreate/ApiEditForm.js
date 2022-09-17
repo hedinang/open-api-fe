@@ -8,21 +8,22 @@ import { formatDateTime } from "helper/utilities";
 import CUSTOM_CONSTANTS from "helper/constantsDefined";
 import Select from "react-select";
 import SystemService from "services/SystemService";
-const ApiForm = (props) => {
+const ApiEditForm = (props) => {
     const { t } = useTranslation();
     const {
         isCreate,
         isEdit,
         values,
-        setFieldValue
+        setFieldValue,
+        dataDetail
+
     } = props;
     let isChange = false;
     if (isEdit || isCreate) {
         isChange = true;
     }
     const SingleValue = ({ data, ...props }) => {
-        if (data.value === "") return <div>{data.label}</div>
-        return (<div>{"+" + data.value}</div>);
+        return (<div>{data.value}</div>);
     };
 
     const [serviceList, setServiceList] = useState([])
@@ -80,10 +81,29 @@ const ApiForm = (props) => {
         }
     }
     useEffect(() => {
+        listGroup(values.serviceId)
+
+    }, [values.serviceId])
+    useEffect(() => {
         listApiMethod()
         listEncryption()
         listService()
     }, [])
+
+    const systemFilter = (serviceId) => {
+        let e = serviceList.find(e => e?.id === serviceId)
+        return {
+            key: e?.id,
+            value: e?.name
+        }
+    }
+    const groupFilter = (groupId) => {
+        let e = groupList.find(e => e?.id === groupId)
+        return {
+            key: e?.id,
+            value: e?.groupName
+        }
+    }
 
     return (
         <>
@@ -102,7 +122,7 @@ const ApiForm = (props) => {
                                     <Col xs="8" md="8">
                                         <Input
                                             type="text"
-                                            value={values.apiName}
+                                            defaultValue={values?.name}
                                             onChange={changeApiName}
                                         />
                                     </Col>
@@ -122,7 +142,8 @@ const ApiForm = (props) => {
                                                 value: element.id
                                             }))}
                                             isSearchable
-                                            defaultValue={"Please select a server instance"}
+                                            components={{ SingleValue }}
+                                            value={systemFilter(values.serviceId)}
                                         />
                                     </Col>
                                 </Row>
@@ -137,14 +158,17 @@ const ApiForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
-                                            // components={{ SingleValue }}
+                                            components={{ SingleValue }}
                                             onChange={changeEncryption}
                                             options={encryptList.map((element) => ({
                                                 label: element.name,
                                                 value: element.name
                                             }))}
                                             isSearchable
-                                            defaultValue={"Please select a server instance"}
+                                            value={{
+                                                key: values?.encryptionType,
+                                                value: values?.encryptionType
+                                            }}
                                         />
                                     </Col>
                                 </Row>
@@ -159,14 +183,17 @@ const ApiForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
-                                            // components={{ SingleValue }}
+                                            components={{ SingleValue }}
                                             onChange={changeMethod}
                                             options={methodList.map((element) => ({
                                                 label: element.name,
                                                 value: element.name
                                             }))}
                                             isSearchable
-                                            defaultValue={"Please select a server instance"}
+                                            value={{
+                                                key: values?.method,
+                                                value: values?.method
+                                            }}
                                         />
                                     </Col>
                                 </Row>
@@ -179,15 +206,14 @@ const ApiForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
-                                            onChange={(e) => {
-                                                changeGroup(e);
-                                            }}
+                                            components={{ SingleValue }}
+                                            onChange={(e) => { changeGroup(e) }}
                                             options={groupList.map((element) => ({
                                                 label: element.groupName,
                                                 value: element.id
                                             }))}
                                             isSearchable
-                                            defaultValue={"Please select a server instance"}
+                                            value={groupFilter(values?.groupId)}
                                         />
                                     </Col>
                                 </Row>
@@ -203,9 +229,10 @@ const ApiForm = (props) => {
                                     rows={10}
                                     // touched={touched.note}
                                     className="mb-0"
+                                    value={values?.requestBody}
                                 // disabled={disabled}
-                                    // onChange={changeRequestBody}
-                                    
+                                // onChange={changeRequestBody}
+
                                 />
                             </Col>
                         </Row>
@@ -218,11 +245,11 @@ const ApiForm = (props) => {
     );
 };
 
-ApiForm.propTypes = {
+ApiEditForm.propTypes = {
     isCreate: PropTypes.bool.isRequired,
     isEdit: PropTypes.bool.isRequired,
     form: PropTypes.instanceOf(Object).isRequired,
     updateForm: PropTypes.func.isRequired
 };
 
-export default ApiForm;
+export default ApiEditForm;

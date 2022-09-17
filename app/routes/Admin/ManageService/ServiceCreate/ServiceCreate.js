@@ -25,27 +25,8 @@ const ServiceCreate = (props) => {
     const history = useHistory();
     const initialValues = {
         serviceName: "",
-        serverUrl: [
-            {
-                id: '123anc',
-                urlName: "sdad",
-                priority: 1
-            }
-
-        ],
-        group: [
-            {
-                id: '123anc',
-                groupName: "sdad",
-                priority: 1
-            },
-            {
-                id: '123assnc',
-                groupName: "sdassd",
-                priority: 2
-            }
-        ]
-
+        serverUrl: [],
+        group: []
     }
     const onDeleteItemReq = (id, rowData, setFieldValue, tableName) => {
         rowData = rowData.filter(e => e.id !== id)

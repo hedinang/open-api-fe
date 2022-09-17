@@ -5,6 +5,7 @@ import i18next from "i18next";
 import ServiceList from "./Admin/ManageService/ServiceList/ServiceList";
 import ServiceDetails from "./Admin/ManageService/ServiceDetails/ServiceDetails";
 import ApiCreate from "./Admin/ManageService/ApiCreate/ApiCreate";
+import ApiEdit from "./Admin/ManageService/ApiCreate/ApiEdit";
 import ServiceCreate from "./Admin/ManageService/ServiceCreate/ServiceCreate";
 
 const ServiceRoutes = [
@@ -19,6 +20,9 @@ const ServiceRoutes = [
     },
     {
         path: "/system-service/service-create", isProtected: false, name: i18next.t("ServiceCreate"), Component: ServiceCreate, render: true
+    },
+    {
+        path: "/system-service/api-edit", isProtected: false, key: 'id', name: i18next.t("ApiEdit"), Component: ApiEdit, render: true
     },
 ];
 

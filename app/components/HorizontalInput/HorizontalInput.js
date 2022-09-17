@@ -59,6 +59,7 @@ const HorizontalInput = (props) => {
                     <Field name={name}>
                         {({ field }) => (
                             <textarea
+                                defaultValue={value}
                                 {...field}
                                 className={
                                     classNames(

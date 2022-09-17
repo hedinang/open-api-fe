@@ -20,30 +20,7 @@ import SystemService from "services/SystemService";
 import CryptoJS from 'crypto-js'
 import fetchToCurl from 'fetch-to-curl';
 import { Formik } from "formik";
-
-const useStyles = makeStyles({
-    "custom-nav": {
-        "&.nav-tabs": {
-            borderBottom: "2px solid #DEE2E6"
-        },
-        "&.nav": {
-            padding: "0 16px"
-        },
-        "&.nav-tabs .nav-link": {
-            marginBottom: "-2px",
-            border: "2px solid transparent"
-        },
-        "&.nav-tabs .nav-link.active, &.nav-tabs .nav-item.show .nav-link": {
-            borderColor: "#DEE2E6 #DEE2E6 #FFF"
-        }
-    },
-    "custom-card": {
-        "&.card": {
-            border: 0,
-            borderRadius: 0
-        }
-    }
-});
+import { useHistory } from "react-router-dom";
 
 const RequestBody = (props) => {
     let { curl, requestUrl, responseBody } = props
@@ -125,8 +102,11 @@ const ServiceDetailLine = (props) => {
         requestParams,
         requestHeaders,
         requestBody,
-        appKey
+        appKey,
+        authorize,
+        apiId
     } = props;
+    const history = useHistory();
     let [responseBody, setResponseBody] = useState('')
     // let [header, setHeader] = useState(requestHeaders)
     let [param, setParam] = useState(requestParams)
@@ -152,23 +132,41 @@ const ServiceDetailLine = (props) => {
         });
         setParam((prevState) => [...prevState])
     }
+    let mergeAuthorizeWithHeader = (header) => {
+        authorize.forEach(e => {
+            header[e.key] = e.value
+        })
+        return header
+    }
 
 
     let requestUrl = serverUrl + '/' + title
     let execute = async (values) => {
         let data = JSON.parse(values.requestBody)
-        let headers = values.requestHeaders.reduce(
-            (obj, item) => Object.assign(obj, { [item.paramName]: item.defaultValue }), {});
-        headers.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzgiLCJpYXQiOjE2NjMyNDcyMDEsImV4cCI6MTY2Mzg1MjAwMX0.gCuZhLT9w9hxM0IFJp_n4BpRUbEnD5H1weohz8surf5rR7mEdHWvJNk11t2BLny0VAL0zXi237DGj1qE0dadcA"
-        headers.isTokenRide = headers.isTokenRide.toString()
+        let headers = values?.requestHeaders?.reduce(
+            (obj, item) => {
+                return item.dataType === 'string' ?
+                    Object.assign(obj,
+                        {
+                            [item.paramName]: item.defaultValue ? item.defaultValue : ''
+                        }
+                    ) : Object.assign(obj,
+                        {
+                            [item.paramName]: item.defaultValue.toString()
+                        }
+                    )
+            }, {});
+        // merge authorize and header ahead
+        if (values.requestHeaders != null)
+            headers = mergeAuthorizeWithHeader(headers)
         const config = {
             headers: headers
         };
         // check encrypt
-        let appKey = headers.appKey
+        let appKey = headers?.appKey
         let encrytion = checkEncrypt(encrypt, values.requestBody, headers, data, appKey)
-        headers = encrytion.headers
-        data = encrytion.data
+        headers = encrytion?.headers
+        data = encrytion?.data
 
         curl = fetchToCurl({
             url: requestUrl,
@@ -206,9 +204,18 @@ const ServiceDetailLine = (props) => {
         }
 
     }
+
+
     const changeBodyRequest = (e, setFieldValue) => {
         setFieldValue('requestBody', e.target.value)
     }
+    const editApi = (e) => {
+        history.push({
+            pathname: 'api-edit',
+            search: `?id=${apiId}`
+        });
+    }
+
 
     return (
         <Formik
@@ -242,8 +249,8 @@ const ServiceDetailLine = (props) => {
 
                                     </Col>
                                     <Col xs='2'>
-                                        {encrypt ?
-                                            <Button className="btn btn-primary" style={{ backgroundColor: 'red', color: 'white', }}>ENCRYPT</Button> : <></>}
+                                        {encrypt !== 'NONE' ?
+                                            <Button className="btn btn-primary" style={{ backgroundColor: '#f27212', color: 'white' }}>ENCRYPT</Button> : <></>}
                                     </Col>
                                     <Col xs='1'>
                                     </Col>
@@ -265,13 +272,22 @@ const ServiceDetailLine = (props) => {
                                                         Parameters
                                                     </Button>
                                                 </Col>
-                                                <Col xs='9'>
+                                                <Col xs='8'>
                                                 </Col>
                                                 <Col xs='1'>
                                                     <Button btn btn-primary style={{
                                                         color: 'white', backgroundColor: '#4ecb93'
-                                                    }}>
+                                                    }}
+                                                        onClick={editApi}
+                                                    >
                                                         Edit
+                                                    </Button>
+                                                </Col>
+                                                <Col xs='1'>
+                                                    <Button btn btn-primary style={{
+                                                        color: 'white', backgroundColor: 'red'
+                                                    }}>
+                                                        DELETE
                                                     </Button>
                                                 </Col>
                                             </Row>
@@ -297,7 +313,7 @@ const ServiceDetailLine = (props) => {
                                             </Row>
                                         </Col>
                                     </Row>
-                                    {values.requestHeaders.map(e => <ServiceRequestHeader requestHeader={e}
+                                    {values?.requestHeaders?.map(e => <ServiceRequestHeader requestHeader={e}
                                         onChangeHeader={onChangeHeader} setFieldValue={setFieldValue} />)}
                                     {/* {param.map(e => <ServiceRequestParam requestParam={e} onChangeParam={onChangeParam} />)} */}
                                     <Row xs="12" className="d-flex mx-0">

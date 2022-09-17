@@ -12,20 +12,22 @@ import {
 import useToast from "routes/hooks/useToast";
 import { HeaderMain } from "routes/components/HeaderMain";
 import StickyFooter from "components/StickyFooter";
-import ApiCreateForm from "./ApiCreateForm";
+import ApiEditForm from "./ApiEditForm";
 import { Formik, Form } from "formik";
 import { AddItemRequest } from "routes/components";
 import { HeaderSecondary } from "routes/components/HeaderSecondary";
 import SystemService from "services/SystemService";
 import uuid from 'uuid/v4';
-const ApiCreate = (props) => {
+const ApiEdit = (props) => {
     const { t } = useTranslation();
     const [isCreate, setIsCreate] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
     const initialValues = {}
+    const [dataDetail, setDataDetail] = useState()
 
     const onSavePressHandler = async (values) => {
-        let response = await SystemService.createApi(values)
+        console.log('aa')
+        let response = await SystemService.updateApi(values)
         if (response.data.status === "OK") {
             // back list screen
             showToast("success", response.data.message);
@@ -47,6 +49,28 @@ const ApiCreate = (props) => {
         rowData = rowData.filter(e => e.id !== id)
         setFieldValue(tableName, rowData)
     };
+    const getApiDetail = async (apiId) => {
+        let response = await SystemService.detailApi(apiId)
+        if (response.data.status === "OK") {
+            let drawData = response.data.data
+            initialValues.name = drawData.name
+            initialValues.serviceId = drawData.systemId
+            initialValues.method = drawData.method
+            initialValues.encryptionType = drawData.encryptionType
+            initialValues.groupId = drawData.groupId
+            initialValues.requestBody = drawData.requestBody
+            initialValues.params = drawData.params
+            setDataDetail(drawData)
+        } else {
+            showToast("error", error.response.data.message);
+        }
+    }
+    useEffect(() => {
+        const query = new URLSearchParams(location.search);
+        const id = query.get("id");
+        initialValues.apiId = id
+        getApiDetail(id)
+    }, [])
     return (
         <Container fluid>
             <Formik
@@ -62,19 +86,20 @@ const ApiCreate = (props) => {
                             <Row className="mb-1">
                                 <Col lg={12}>
                                     <HeaderMain
-                                        title={(t("Create Api"))}
+                                        title={(t("Edit Api"))}
                                         className="mb-3 mb-lg-3"
                                     />
                                 </Col>
                             </Row>
                             <Row className="mb-5">
                                 <Col lg={12}>
-                                    <ApiCreateForm
+                                    <ApiEditForm
                                         isCreate={isCreate}
                                         isEdit={isEdit}
                                         headerName={t("General Information")}
                                         values={values}
                                         setFieldValue={setFieldValue}
+                                        dataDetail={dataDetail}
                                     />
                                 </Col>
                             </Row>
@@ -138,4 +163,4 @@ const ApiCreate = (props) => {
         </Container>
     )
 }
-export default ApiCreate;
+export default ApiEdit;
