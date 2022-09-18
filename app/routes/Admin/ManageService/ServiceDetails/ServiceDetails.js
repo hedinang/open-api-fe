@@ -25,8 +25,9 @@ const ServiceDetails = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     let [authorize, setAuthorize] = useState([])
     let [dataDetail, setDataDetail] = useState()
-
-    const getServiceDetail = async (serviceId) => {
+    const query = new URLSearchParams(location.search);
+    const serviceId = query.get("id");
+    const getServiceDetail = async () => {
         let response = await SystemService.detailService(serviceId)
         if (response.data.status === "OK") {
             setDataDetail(response.data.data)
@@ -35,14 +36,23 @@ const ServiceDetails = (props) => {
         }
     }
     useEffect(() => {
-        const query = new URLSearchParams(location.search);
-        const id = query.get("id");
-        getServiceDetail(id)
+        getServiceDetail()
     }, [])
 
+    const deleteApi = async (apiId) => {
+        let response = await SystemService.deleteApi(apiId)
+        if (response.data.status === "OK") {
+            getServiceDetail()
+        } else {
+            showToast("error", error.response.data.message);
+        }
+    }
 
     const onBackButtonPressHandler = () => {
 
+    };
+    const onEditService = () => {
+        history.push('/system-service/service-edit?id=' + serviceId);
     };
     const initialValues = {}
     return (
@@ -72,8 +82,6 @@ const ServiceDetails = (props) => {
                                         <ServiceForm
                                             isCreate={isCreate}
                                             isEdit={isEdit}
-                                            // form={form}
-                                            // updateForm={updateForm}
                                             headerName={t("General Information")}
                                             values={values}
                                             setFieldValue={setFieldValue}
@@ -86,6 +94,7 @@ const ServiceDetails = (props) => {
                                 <Row className="mb-5">
                                     {dataDetail?.groupDtoList?.map(e => < ServiceGroupDetails groupService={e}
                                         authorize={authorize}
+                                        deleteApi={deleteApi}
                                         serverUrl={values.serverUrl} />)}
                                 </Row>
                                 <StickyFooter>
@@ -95,6 +104,12 @@ const ServiceDetails = (props) => {
                                             onClick={() => (isEdit ? onBackButtonPressHandler() : history.goBack())}
                                         >
                                             {t("Back")}
+                                        </Button>
+                                        <Button
+                                            className="mb-2 btn btn-secondary"
+                                            onClick={onEditService}
+                                        >
+                                            {t("Edit")}
                                         </Button>
                                     </Row>
                                 </StickyFooter>

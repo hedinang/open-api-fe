@@ -7,6 +7,7 @@ import ServiceDetails from "./Admin/ManageService/ServiceDetails/ServiceDetails"
 import ApiCreate from "./Admin/ManageService/ApiCreate/ApiCreate";
 import ApiEdit from "./Admin/ManageService/ApiCreate/ApiEdit";
 import ServiceCreate from "./Admin/ManageService/ServiceCreate/ServiceCreate";
+import ServiceEdit from "./Admin/ManageService/ServiceCreate/ServiceEdit";
 
 const ServiceRoutes = [
     {
@@ -23,6 +24,9 @@ const ServiceRoutes = [
     },
     {
         path: "/system-service/api-edit", isProtected: false, key: 'id', name: i18next.t("ApiEdit"), Component: ApiEdit, render: true
+    },
+    {
+        path: "/system-service/service-edit", isProtected: false, key: 'id', name: i18next.t("ServiceEdit"), Component: ServiceEdit, render: true
     },
 ];
 

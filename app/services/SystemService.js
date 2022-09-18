@@ -45,6 +45,25 @@ class SystemService {
         let a = axios.post(url, data);
         return a
     }
+    updateService({ serviceName, serverUrl, group }, serviceId) {
+        group = group.map(e => {
+            if (e.isNew) return {
+                groupName: e.groupName,
+                priority: e.priority
+            }
+            return e
+        })
+        const data = {
+            id: serviceId,
+            name: serviceName,
+            serverUrl: serverUrl,
+            group: group,
+            status: 'ACTIVE'
+        }
+        const url = CONFIG.UPDATE_SERVICE.replace('{id}', serviceId);
+        let a = axios.put(url, data);
+        return a
+    }
     detailService(serviceId) {
         const url = CONFIG.DETAIL_SERVICE.replace('{id}', serviceId);
         let a = axios.get(url);
@@ -80,6 +99,11 @@ class SystemService {
         }
         const url = CONFIG.UPDATE_API.replace('{id}', apiId);;
         return axios.put(url, data);
+    }
+    deleteApi(apiId) {
+        const url = CONFIG.DELETE_API.replace('{id}', apiId);
+        let a = axios.delete(url);
+        return a
     }
 }
 

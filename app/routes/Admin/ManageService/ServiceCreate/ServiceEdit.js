@@ -19,15 +19,37 @@ import SystemService from "services/SystemService";
 import { useHistory } from "react-router";
 
 
-const ServiceCreate = (props) => {
+const ServiceEdit = (props) => {
     const { t } = useTranslation();
     const showToast = useToast();
     const history = useHistory();
+    const query = new URLSearchParams(location.search);
+    const serviceId = query.get("id");
+    const [dataDetail, setDataDetail] = useState()
     const initialValues = {
         serviceName: "",
         serverUrl: [],
         group: []
     }
+    const getDetailService = async () => {
+        let response = await SystemService.detailService(serviceId)
+        if (response.data.status === "OK") {
+            let drawData = response.data.data
+            initialValues.serviceName = drawData.name
+            drawData.serverUrl.forEach(element => {
+                element.id = uuid()
+            });
+            initialValues.serverUrl = drawData.serverUrl
+            initialValues.group = drawData.groupDtoList
+            setDataDetail(drawData)
+        } else {
+            showToast("error", "Validation error, please check your input.");
+        }
+    }
+    useEffect(() => {
+        getDetailService()
+    }, [])
+
     const onDeleteItemReq = (id, rowData, setFieldValue, tableName) => {
         rowData = rowData.filter(e => e.id !== id)
         setFieldValue(tableName, rowData)
@@ -43,7 +65,8 @@ const ServiceCreate = (props) => {
                 break;
             case 'group':
                 items.push({
-                    id: uuid()
+                    id: uuid(),
+                    isNew: true
                 })
                 break;
             default:
@@ -52,7 +75,8 @@ const ServiceCreate = (props) => {
         setFieldValue(tableName, items)
     };
     const onSavePressHandler = async (values) => {
-        let response = await SystemService.createService(values)
+        console.log('aaa')
+        let response = await SystemService.updateService(values, serviceId)
         if (response.data.status === "OK") {
             // back list screen
             showToast("success", response.data.message);
@@ -79,7 +103,7 @@ const ServiceCreate = (props) => {
                             <Row className="mb-1">
                                 <Col lg={12}>
                                     <HeaderMain
-                                        title={(t("Create Service"))}
+                                        title={(t("Edit Service"))}
                                         className="mb-3 mb-lg-3"
                                     />
                                 </Col>
@@ -192,4 +216,4 @@ const ServiceCreate = (props) => {
         </Container>
     )
 }
-export default ServiceCreate;
+export default ServiceEdit;

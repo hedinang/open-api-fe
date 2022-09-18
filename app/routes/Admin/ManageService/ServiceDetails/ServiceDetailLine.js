@@ -104,7 +104,8 @@ const ServiceDetailLine = (props) => {
         requestBody,
         appKey,
         authorize,
-        apiId
+        apiId,
+        deleteApi
     } = props;
     const history = useHistory();
     let [responseBody, setResponseBody] = useState('')
@@ -215,8 +216,6 @@ const ServiceDetailLine = (props) => {
             search: `?id=${apiId}`
         });
     }
-
-
     return (
         <Formik
             initialValues={initialValues}
@@ -286,7 +285,9 @@ const ServiceDetailLine = (props) => {
                                                 <Col xs='1'>
                                                     <Button btn btn-primary style={{
                                                         color: 'white', backgroundColor: 'red'
-                                                    }}>
+                                                    }}
+                                                        onClick={e => deleteApi(apiId)}
+                                                    >
                                                         DELETE
                                                     </Button>
                                                 </Col>

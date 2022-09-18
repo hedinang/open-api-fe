@@ -5,18 +5,13 @@ import {
     Card, CardBody, FormGroup, Col, Row, Label, Input
 } from "components";
 import { MultiAdd } from "../components/MultiSelect/MultiAdd";
-const ServiceForm = (props) => {
+const ServiceCreateForm = (props) => {
     const { t } = useTranslation();
     const {
-        isCreate,
-        isEdit,
         serviceName,
         setFieldValue
     } = props;
-    let isChange = false;
-    if (isEdit || isCreate) {
-        isChange = true;
-    }
+    
     const SingleValue = ({ data, ...props }) => {
         if (data.value === "") return <div>{data.label}</div>
         return (<div>{"+" + data.value}</div>);
@@ -91,11 +86,11 @@ const ServiceForm = (props) => {
     );
 };
 
-ServiceForm.propTypes = {
+ServiceCreateForm.propTypes = {
     isCreate: PropTypes.bool.isRequired,
     isEdit: PropTypes.bool.isRequired,
     form: PropTypes.instanceOf(Object).isRequired,
     updateForm: PropTypes.func.isRequired
 };
 
-export default ServiceForm;
+export default ServiceCreateForm;
