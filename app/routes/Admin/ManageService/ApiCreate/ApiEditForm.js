@@ -8,6 +8,8 @@ import { formatDateTime } from "helper/utilities";
 import CUSTOM_CONSTANTS from "helper/constantsDefined";
 import Select from "react-select";
 import SystemService from "services/SystemService";
+import { Field } from "formik";
+import classNames from "classnames";
 const ApiEditForm = (props) => {
     const { t } = useTranslation();
     const {
@@ -36,6 +38,9 @@ const ApiEditForm = (props) => {
     const changeGroup = (e) => {
         setFieldValue('group', e.value)
     }
+    const changeRequestBody = (e) => {
+        setFieldValue('requestBody', e.target.value)
+    }
     const changeSystem = (e) => {
         setFieldValue('serviceId', e.value)
         listGroup(e.value)
@@ -46,11 +51,8 @@ const ApiEditForm = (props) => {
     }
     const changeMethod = (e) => {
         setFieldValue('method', e.value)
-        listGroup(e.value)
     }
-    const changeRequestBody = (e) => {
-        setFieldValue('defaultRequestBody', e.value)
-    }
+
     const listApiMethod = async () => {
         let response = await SystemService.listApiMethod();
         if (response.data.status === "OK") {
@@ -149,10 +151,7 @@ const ApiEditForm = (props) => {
                                 </Row>
                                 <Row xs='12'>
                                     <Col xs="4" md="4">
-                                        <label
-                                        // htmlFor="userName"
-                                        // className={classes.inputText1}
-                                        >
+                                        <label>
                                             {t("Encrytion")}
                                         </label>
                                     </Col>
@@ -219,21 +218,28 @@ const ApiEditForm = (props) => {
                                 </Row>
                             </Col>
                             <Col xs="6" md="6">
-                                <HorizontalInput
-                                    name="defaultRequestBody"
-                                    label={t("Default request body")}
-                                    type="textarea"
-                                    maxLength={3000}
-                                    placeholder={t("Enter default request body")}
-                                    // errors={errors.note}
-                                    rows={10}
-                                    // touched={touched.note}
-                                    className="mb-0"
-                                    value={values?.requestBody}
-                                // disabled={disabled}
-                                // onChange={changeRequestBody}
+                                <Row xs="12" md="12">
+                                    <Col xs="4" md="4">
+                                        <Label className="p-0">Default request body</Label>
+                                    </Col>
+                                    <Col xs="8" md="8">
+                                        <textarea
+                                            value={values?.requestBody}
+                                            type="textarea"
+                                            maxLength={3000}
+                                            rows={9}
+                                            className={
+                                                classNames(
+                                                    "form-control",
+                                                    // { "is-invalid": errors && touched },
+                                                    // { "text-uppercase": upperCase || false }
+                                                )
+                                            }
+                                            onChange={e => changeRequestBody(e)}
+                                        />
+                                    </Col>
 
-                                />
+                                </Row>
                             </Col>
                         </Row>
 

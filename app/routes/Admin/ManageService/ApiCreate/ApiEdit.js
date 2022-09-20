@@ -24,22 +24,24 @@ const ApiEdit = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     const initialValues = {}
     const [dataDetail, setDataDetail] = useState()
+    const showToast = useToast();
+    const history = useHistory();
 
     const onSavePressHandler = async (values) => {
-        console.log('aa')
+        console.log('aaa')
         let response = await SystemService.updateApi(values)
         if (response.data.status === "OK") {
             // back list screen
-            showToast("success", response.data.message);
+            showToast("success", response.data.data);
             setTimeout(() => {
-                history.push('/system-service/service-list');
+                history.push('/system-service/service-detail?id=' + values.serviceId);
             }, 1000);
         } else {
             showToast("error", "Validation error, please check your input.");
         }
     }
     const addItemManual = (totalData, setFieldValue, tableName) => {
-        let items = totalData === undefined ? [] : [...totalData]
+        let items = totalData === null ? [] : [...totalData]
         items.push({
             id: uuid()
         })

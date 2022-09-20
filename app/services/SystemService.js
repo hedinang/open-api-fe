@@ -87,7 +87,7 @@ class SystemService {
         let a = axios.get(url);
         return a
     }
-    updateApi({ apiId, encryptionType, groupId, method, name, requestBody, params, serviceId }) {
+    updateApi({ apiId, encryptionType, groupId, method, name, requestBody, params }) {
         const data = {
             name: name,
             method: method,
