@@ -21,6 +21,7 @@ import CryptoJS from 'crypto-js'
 import fetchToCurl from 'fetch-to-curl';
 import { Formik } from "formik";
 import { useHistory } from "react-router-dom";
+import ActionModal from "routes/components/ActionModal";
 
 const RequestBody = (props) => {
     let { curl, requestUrl, responseBody } = props
@@ -108,6 +109,8 @@ const ServiceDetailLine = (props) => {
         deleteApi
     } = props;
     const history = useHistory();
+    const refActionModalRemoveApi = useRef(null);
+
     let [responseBody, setResponseBody] = useState('')
     // let [header, setHeader] = useState(requestHeaders)
     let [param, setParam] = useState(requestParams)
@@ -117,7 +120,6 @@ const ServiceDetailLine = (props) => {
         requestHeaders: requestHeaders,
 
     }
-
 
     let onChangeHeader = (key, value, setFieldValue,) => {
         let tmp = [...initialValues.requestHeaders]
@@ -216,153 +218,172 @@ const ServiceDetailLine = (props) => {
             search: `?id=${apiId}`
         });
     }
+    // const deleteApi = (e) => {
+    //     history.push({
+    //         pathname: 'api-edit',
+    //         search: `?id=${apiId}`
+    //     });
+    // }
     return (
-        <Formik
-            initialValues={initialValues}
-            onSubmit={() => { }}
+        <>
+            <Formik
+                initialValues={initialValues}
+                onSubmit={() => { }}
 
-        >
-            {({
-                values, setFieldValue
-            }) => {
+            >
+                {({
+                    values, setFieldValue
+                }) => {
 
-                return (
-                    <Accordion style={{ border: `2px solid ${borderTopColor}` }} defaultExpanded={defaultExpanded}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            style={{ borderBottom: `2px solid ${borderTopColor}` }}
-                        >
-                            <Typography style={{ width: '100%', }}>
-                                <Row xs='12'>
-                                    <Col xs='4'>
-                                        <Button className="btn btn-primary" style={{
-                                            color: 'white', backgroundColor: '#49cc90'
+                    return (
+                        <Accordion style={{ border: `2px solid ${borderTopColor}` }} defaultExpanded={defaultExpanded}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                                style={{ borderBottom: `2px solid ${borderTopColor}` }}
+                            >
+                                <Typography style={{ width: '100%', }}>
+                                    <Row xs='12'>
+                                        <Col xs='4'>
+                                            <Button className="btn btn-primary" style={{
+                                                color: 'white', backgroundColor: '#49cc90'
+                                            }}>
+                                                {method}
+                                            </Button>
+                                            <span style={{ paddingLeft: '20px' }}>{title}</span>
+                                        </Col>
+                                        <Col xs='5'>
+
+                                        </Col>
+                                        <Col xs='2'>
+                                            {encrypt !== 'NONE' ?
+                                                <Button className="btn btn-primary" style={{ backgroundColor: '#f27212', color: 'white' }}>ENCRYPT</Button> : <></>}
+                                        </Col>
+                                        <Col xs='1'>
+                                        </Col>
+                                    </Row>
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails style={{ display: "block", padding: 0 }}>
+                                <Row xs="12" className="d-flex mx-0" >
+                                    <Col xs="12">
+                                        <Row xs="12" className="d-flex mx-0">
+                                            <Col xs="12">
+                                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                    <Col xs='2'>
+                                                        <Button style={{
+                                                            color: 'black', fontSize: '14px', backgroundColor: 'white'
+                                                            , borderTop: 'none', borderLeft: 'none', borderRight: 'none'
+                                                            , borderWidth: '5px', borderColor: '#49cc90', borderRadius: 'unset'
+                                                        }}>
+                                                            Parameters
+                                                        </Button>
+                                                    </Col>
+                                                    <Col xs='8'>
+                                                    </Col>
+                                                    <Col xs='1'>
+                                                        <Button btn btn-primary style={{
+                                                            color: 'white', backgroundColor: '#4ecb93'
+                                                        }}
+                                                            onClick={editApi}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                    </Col>
+                                                    <Col xs='1'>
+                                                        <Button btn btn-primary style={{
+                                                            color: 'white', backgroundColor: 'red'
+                                                        }}
+                                                            // onClick={e => deleteApi(apiId)}
+                                                            onClick={() => refActionModalRemoveApi.current.toggleModal()}
+                                                        >
+                                                            DELETE
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                        <Row xs="12" className="d-flex mx-0" style={{
+                                            backgroundColor: '#e9f6f000'
                                         }}>
-                                            {method}
-                                        </Button>
-                                        <span style={{ paddingLeft: '20px' }}>{title}</span>
-                                    </Col>
-                                    <Col xs='5'>
+                                            <Col xs="12">
+                                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                    <Col xs='2'>
+                                                        Name
+                                                    </Col>
+                                                    <Col xs='4'>
+                                                        Input
+                                                    </Col>
+                                                    <Col xs='1'>
+                                                        Mandatory
+                                                    </Col>
+                                                    <Col xs='5'>
+                                                        Description
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                        {values?.requestHeaders?.map(e => <ServiceRequestHeader requestHeader={e}
+                                            onChangeHeader={onChangeHeader} setFieldValue={setFieldValue} />)}
+                                        {/* {param.map(e => <ServiceRequestParam requestParam={e} onChangeParam={onChangeParam} />)} */}
+                                        <Row xs="12" className="d-flex mx-0">
+                                            <div style={{ fontSize: '14px' }}>Request body</div>
+                                        </Row>
+                                        <Row xs="12" className="d-flex mx-0">
+                                            <Input style={{ color: 'black', height: '300px' }}
+                                                type="textarea"
+                                                value={values.requestBody}
+                                                height='100px'
+                                                onChange={e => changeBodyRequest(e, setFieldValue)}
+                                            />
+                                        </Row>
+                                        <Row xs="12" className="d-flex mx-0" style={{
+                                        }}>
+                                            <Col xs="12">
+                                                <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
+                                                    <Col xs='6'>
+                                                        <Button style={{
+                                                            color: 'white', fontSize: '14px', backgroundColor: '#4990e2', width: '100%'
+                                                        }}
+                                                            onClick={e => execute(values)}
+                                                        >
+                                                            Execute
+                                                        </Button>
+                                                    </Col>
+                                                    <Col xs='6'>
+                                                        <Button style={{
+                                                            color: 'black', fontSize: '14px', backgroundColor: 'white', width: '100%'
+                                                        }}>
+                                                            Clear
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                        {
+                                            isExecute ? <RequestBody curl={curl} requestUrl={requestUrl} responseBody={responseBody} /> : <></>
 
-                                    </Col>
-                                    <Col xs='2'>
-                                        {encrypt !== 'NONE' ?
-                                            <Button className="btn btn-primary" style={{ backgroundColor: '#f27212', color: 'white' }}>ENCRYPT</Button> : <></>}
-                                    </Col>
-                                    <Col xs='1'>
+                                        }
                                     </Col>
                                 </Row>
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails style={{ display: "block", padding: 0 }}>
-                            <Row xs="12" className="d-flex mx-0" >
-                                <Col xs="12">
-                                    <Row xs="12" className="d-flex mx-0">
-                                        <Col xs="12">
-                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                                <Col xs='2'>
-                                                    <Button style={{
-                                                        color: 'black', fontSize: '14px', backgroundColor: 'white'
-                                                        , borderTop: 'none', borderLeft: 'none', borderRight: 'none'
-                                                        , borderWidth: '5px', borderColor: '#49cc90', borderRadius: 'unset'
-                                                    }}>
-                                                        Parameters
-                                                    </Button>
-                                                </Col>
-                                                <Col xs='8'>
-                                                </Col>
-                                                <Col xs='1'>
-                                                    <Button btn btn-primary style={{
-                                                        color: 'white', backgroundColor: '#4ecb93'
-                                                    }}
-                                                        onClick={editApi}
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                </Col>
-                                                <Col xs='1'>
-                                                    <Button btn btn-primary style={{
-                                                        color: 'white', backgroundColor: 'red'
-                                                    }}
-                                                        onClick={e => deleteApi(apiId)}
-                                                    >
-                                                        DELETE
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                    <Row xs="12" className="d-flex mx-0" style={{
-                                        backgroundColor: '#e9f6f000'
-                                    }}>
-                                        <Col xs="12">
-                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                                <Col xs='2'>
-                                                    Name
-                                                </Col>
-                                                <Col xs='4'>
-                                                    Input
-                                                </Col>
-                                                <Col xs='1'>
-                                                    Mandatory
-                                                </Col>
-                                                <Col xs='5'>
-                                                    Description
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                    {values?.requestHeaders?.map(e => <ServiceRequestHeader requestHeader={e}
-                                        onChangeHeader={onChangeHeader} setFieldValue={setFieldValue} />)}
-                                    {/* {param.map(e => <ServiceRequestParam requestParam={e} onChangeParam={onChangeParam} />)} */}
-                                    <Row xs="12" className="d-flex mx-0">
-                                        <div style={{ fontSize: '14px' }}>Request body</div>
-                                    </Row>
-                                    <Row xs="12" className="d-flex mx-0">
-                                        <Input style={{ color: 'black', height: '300px' }}
-                                            type="textarea"
-                                            value={values.requestBody}
-                                            height='100px'
-                                            onChange={e => changeBodyRequest(e, setFieldValue)}
-                                        />
-                                    </Row>
-                                    <Row xs="12" className="d-flex mx-0" style={{
-                                    }}>
-                                        <Col xs="12">
-                                            <Row xs="12" className="d-flex mx-0" style={{ marginTop: '5px', borderBottom: '2px' }}>
-                                                <Col xs='6'>
-                                                    <Button style={{
-                                                        color: 'white', fontSize: '14px', backgroundColor: '#4990e2', width: '100%'
-                                                    }}
-                                                        onClick={e => execute(values)}
-                                                    >
-                                                        Execute
-                                                    </Button>
-                                                </Col>
-                                                <Col xs='6'>
-                                                    <Button style={{
-                                                        color: 'black', fontSize: '14px', backgroundColor: 'white', width: '100%'
-                                                    }}>
-                                                        Clear
-                                                    </Button>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </Row>
-                                    {
-                                        isExecute ? <RequestBody curl={curl} requestUrl={requestUrl} responseBody={responseBody} /> : <></>
 
-                                    }
-                                </Col>
-                            </Row>
-
-                        </AccordionDetails>
-                    </Accordion>
-                )
-            }}
-        </Formik>
+                            </AccordionDetails>
+                        </Accordion>
+                    )
+                }}
+            </Formik>
+            <ActionModal
+                ref={refActionModalRemoveApi}
+                title="Remove Api"
+                body="Do you wish to remove this api?"
+                button="Yes"
+                color="primary"
+                textCancel="No"
+                colorCancel="danger"
+                action={(e) => deleteApi(apiId)}
+            />
+        </>
     );
 };
 

@@ -77,11 +77,11 @@ const DefaultSidebar = () => {
                 <StyledContainer backgroundColor={DOXA_COLORS.PEACH}>
                     <SidebarTopA />
                 </StyledContainer>
-                <SidebarCompany
+                {/* <SidebarCompany
                     onChangeCompany={onChangeCompany}
                     companies={data.companies}
                     companyLogo={companyLogo}
-                />
+                /> */}
                 <Sidebar.Section fluid cover>
                     { /* SIDEBAR: Menu */}
                     <SidebarMiddleNav

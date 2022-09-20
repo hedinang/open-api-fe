@@ -105,6 +105,11 @@ class SystemService {
         let a = axios.delete(url);
         return a
     }
+    deleteService(serviceId) {
+        const url = CONFIG.DELETE_SERVICE.replace('{id}', serviceId);
+        let a = axios.delete(url);
+        return a
+    }
 }
 
 export default new SystemService();

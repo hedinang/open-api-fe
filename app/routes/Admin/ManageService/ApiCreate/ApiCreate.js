@@ -20,6 +20,8 @@ import SystemService from "services/SystemService";
 import uuid from 'uuid/v4';
 const ApiCreate = (props) => {
     const { t } = useTranslation();
+    const showToast = useToast();
+    const history = useHistory();
     const [isCreate, setIsCreate] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
     const initialValues = {}
@@ -30,7 +32,7 @@ const ApiCreate = (props) => {
             // back list screen
             showToast("success", response.data.message);
             setTimeout(() => {
-                history.push('/system-service/service-list');
+                history.push('/system-service/service-detail?id=' + values.serviceId);
             }, 1000);
         } else {
             showToast("error", "Validation error, please check your input.");

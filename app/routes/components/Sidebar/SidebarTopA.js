@@ -137,30 +137,6 @@ const SidebarTopA = () => {
                                 />
                             </Sidebar.HideSlim>
                         </Link>
-                        {isAuthenticated && (
-                            <UncontrolledButtonDropdown>
-                                <DropdownToggle color="link" className="btn-profile sidebar__link shadow-none" style={{ color: "white" }}>
-                                    {permissionReducer.featureBasedOn}
-                                    {" "}
-                                    PROFILE
-                                    <i className="fa fa-angle-down ml-2" />
-                                </DropdownToggle>
-                                <DropdownMenu persist>
-                                    {featureCheck()}
-                                    {/* <DropdownItem tag={ Link } to="/apps/profile-details">
-                                        My Profile
-                                    </DropdownItem> */}
-                                    <DropdownItem tag={Link} to="/me/settings">
-                                        Settings
-                                    </DropdownItem>
-                                    <DropdownItem divider />
-                                    <DropdownItem tag={Link} to="/login" onClick={UserService.logout}>
-                                        <i className="fa fa-fw fa-sign-out mr-2" />
-                                        Sign Out
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledButtonDropdown>
-                        )}
                     </div>
                     <div style={{ color: "white", fontSize: "1.1em", fontWeight: 600 }} className="w-100">
                         { authReducer.userDetails?.name }
@@ -173,7 +149,7 @@ const SidebarTopA = () => {
             { /* END: Sidebar Default */ }
 
             { /* START: Sidebar Slim */ }
-            <Sidebar.ShowSlim>
+            {/* <Sidebar.ShowSlim>
                 <Sidebar.Section>
                     <Avatar.Image
                         size="sm"
@@ -192,7 +168,7 @@ const SidebarTopA = () => {
                         ]}
                     />
                 </Sidebar.Section>
-            </Sidebar.ShowSlim>
+            </Sidebar.ShowSlim> */}
             { /* END: Sidebar Slim */ }
         </>
     );

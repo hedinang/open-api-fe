@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 import { useHistory, useLocation } from "react-router";
@@ -16,6 +16,7 @@ import { useCurrentCompany, usePermission } from "routes/hooks";
 import ServiceForm from "./ServiceForm";
 import { Formik, Form } from "formik";
 import ServiceGroupDetails from "./ServiceGroupDetails";
+import ActionModal from "routes/components/ActionModal";
 
 const ServiceDetails = (props) => {
     const { t } = useTranslation();
@@ -25,6 +26,7 @@ const ServiceDetails = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     let [authorize, setAuthorize] = useState([])
     let [dataDetail, setDataDetail] = useState()
+    const refActionModalRemoveService = useRef(null);
     const query = new URLSearchParams(location.search);
     const serviceId = query.get("id");
     const getServiceDetail = async () => {
@@ -32,7 +34,7 @@ const ServiceDetails = (props) => {
         if (response.data.status === "OK") {
             setDataDetail(response.data.data)
         } else {
-            showToast("error", error.response.data.message);
+            showToast("error", response.data.message);
         }
     }
     useEffect(() => {
@@ -42,9 +44,20 @@ const ServiceDetails = (props) => {
     const deleteApi = async (apiId) => {
         let response = await SystemService.deleteApi(apiId)
         if (response.data.status === "OK") {
+            showToast("success", response.data.message);
             getServiceDetail()
         } else {
-            showToast("error", error.response.data.message);
+            showToast("error", response.data.message);
+        }
+    }
+    const deleteService = async () => {
+        console.log('aaa')
+        let response = await SystemService.deleteService(serviceId)
+        if (response.data.status === "OK") {
+            showToast("success", response.data.message);
+            history.push('/system-service/service-list')
+        } else {
+            showToast("error", response.data.message);
         }
     }
 
@@ -100,23 +113,44 @@ const ServiceDetails = (props) => {
                                 <StickyFooter>
                                     <Row className="justify-content-between mx-0 px-3">
                                         <Button
-                                            className="mb-2 btn btn-secondary"
                                             onClick={() => (isEdit ? onBackButtonPressHandler() : history.goBack())}
                                         >
                                             {t("Back")}
                                         </Button>
-                                        <Button
-                                            className="mb-2 btn btn-secondary"
-                                            onClick={onEditService}
-                                        >
-                                            {t("Edit")}
-                                        </Button>
+                                        <Row className="mx-0">
+                                            <Button
+                                                color="danger" // danger warning primary
+                                                className="mr-3"
+                                                type="submit"
+                                                onClick={() => refActionModalRemoveService.current.toggleModal()}
+
+                                            >
+                                                {t("Remove")}
+                                            </Button>
+                                            <Button
+                                                color="primary"
+                                                type="submit"
+                                                onClick={onEditService}
+                                            >
+                                                {t("Edit")}
+                                            </Button>
+                                        </Row>
                                     </Row>
                                 </StickyFooter>
                             </Form>
                         )
                     }}
                 </Formik>
+                <ActionModal
+                    ref={refActionModalRemoveService}
+                    title="Remove Api"
+                    body="Do you wish to remove this service?"
+                    button="Yes"
+                    color="primary"
+                    textCancel="No"
+                    colorCancel="danger"
+                    action={(e) => deleteService()}
+                />
             </Container>
         </>
     );

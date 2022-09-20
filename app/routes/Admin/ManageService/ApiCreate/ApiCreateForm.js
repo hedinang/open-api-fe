@@ -45,7 +45,6 @@ const ApiCreateForm = (props) => {
     }
     const changeMethod = (e) => {
         setFieldValue('method', e.value)
-        listGroup(e.value)
     }
     const changeRequestBody = (e) => {
         setFieldValue('defaultRequestBody', e.value)
@@ -129,8 +128,6 @@ const ApiCreateForm = (props) => {
                                 <Row xs='12'>
                                     <Col xs="4" md="4">
                                         <label
-                                        // htmlFor="userName"
-                                        // className={classes.inputText1}
                                         >
                                             {t("Encrytion")}
                                         </label>
@@ -151,15 +148,12 @@ const ApiCreateForm = (props) => {
                                 <Row xs='12'>
                                     <Col xs="4" md="4">
                                         <label
-                                        // htmlFor="userName"
-                                        // className={classes.inputText1}
                                         >
                                             {t("Method")}
                                         </label>
                                     </Col>
                                     <Col xs="8" md="8" className="label-required">
                                         <Select
-                                            // components={{ SingleValue }}
                                             onChange={changeMethod}
                                             options={methodList.map((element) => ({
                                                 label: element.name,
@@ -199,13 +193,8 @@ const ApiCreateForm = (props) => {
                                     type="textarea"
                                     maxLength={3000}
                                     placeholder={t("Enter default request body")}
-                                    // errors={errors.note}
                                     rows={10}
-                                    // touched={touched.note}
                                     className="mb-0"
-                                // disabled={disabled}
-                                    // onChange={changeRequestBody}
-                                    
                                 />
                             </Col>
                         </Row>

@@ -34,7 +34,8 @@ const URL_CONFIG = {
     DETAIL_API: `${BASE_URL}/api/detail/{id}`,
     UPDATE_API: `${BASE_URL}/api/update/{id}`,
     DELETE_API: `${BASE_URL}/api/delete/{id}`,
-    
+    DELETE_SERVICE: `${BASE_URL}/service/delete/{id}`,
+    LOGIN_PATH: `${BASE_URL}/user/login`,
 
 
 
@@ -56,7 +57,7 @@ const URL_CONFIG = {
 
     ROOT_AUTH_URL: BASE_URL + AUTH_PREFIX,
 
-    LOGIN_PATH: `${BASE_URL + AUTH_PREFIX}/users/signin`,
+    // LOGIN_PATH: `${BASE_URL + AUTH_PREFIX}/users/signin`,
     SSO_LOGIN_PATH: `${BASE_URL}login`,
     SSO_LOGOUT_PATH: `${OAUTH_URL}logout`,
     SSO_GET_TOKEN: `${BASE_URL}auth/token`,

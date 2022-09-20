@@ -21,8 +21,11 @@ class UserService {
     }
 
     ssoLogin() {
-        const redirectUri = `${window.location.origin}/sso_redirect`;
-        window.location.href = `${OAUTH_URL}authorize?redirect_uri=${redirectUri}&client_id=${CLIENT_ID}&response_type=code&scope=openid`;
+        // const redirectUri = `${window.location.origin}/sso_redirect`;
+        // window.location.href = `${OAUTH_URL}authorize?redirect_uri=${redirectUri}&client_id=${CLIENT_ID}&response_type=code&scope=openid`;
+        // const redirectUri = `${window.location.origin}/sso_redirect`;
+        window.location.href = 'http://localhost:4100/login';
+
     }
 
     getOauth2Token(code) {
@@ -46,18 +49,18 @@ class UserService {
 
     logout() {
         // const dispatch = useDispatch();
-        store.dispatch({
-            type: actionTypes.CHANGE_LOGOUT,
-            logout: true
-        });
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("mustSetPassword");
-        localStorage.removeItem("company");
-        localStorage.removeItem("companyRole");
-        localStorage.removeItem("currentCompanyUUID");
-        const cookies = new Cookies();
-        cookies.remove(process.env.SHARE_COOKIES_NAME, { domain: `${process.env.SHARE_COOKIES_DOMAIN}` });
+        // store.dispatch({
+        //     type: actionTypes.CHANGE_LOGOUT,
+        //     logout: true
+        // });
+        // localStorage.removeItem("token");
+        // localStorage.removeItem("user");
+        // localStorage.removeItem("mustSetPassword");
+        // localStorage.removeItem("company");
+        // localStorage.removeItem("companyRole");
+        // localStorage.removeItem("currentCompanyUUID");
+        // const cookies = new Cookies();
+        // cookies.remove(process.env.SHARE_COOKIES_NAME, { domain: `${process.env.SHARE_COOKIES_DOMAIN}` });
         this.ssoLogin();
     }
 
