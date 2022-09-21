@@ -100,6 +100,7 @@ const ApiCreateForm = (props) => {
                                     </Col>
                                     <Col xs="8" md="8">
                                         <Input
+                                            placeholder="enter name for api"
                                             type="text"
                                             value={values.apiName}
                                             onChange={changeApiName}

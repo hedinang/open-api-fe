@@ -26,6 +26,7 @@ const ServiceDetails = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     let [authorize, setAuthorize] = useState([])
     let [dataDetail, setDataDetail] = useState()
+    const token = localStorage.getItem(process.env.SHARE_COOKIES_NAME)
     const refActionModalRemoveService = useRef(null);
     const query = new URLSearchParams(location.search);
     const serviceId = query.get("id");
@@ -67,6 +68,30 @@ const ServiceDetails = (props) => {
     const onEditService = () => {
         history.push('/system-service/service-edit?id=' + serviceId);
     };
+    const bottomButtonList = () => {
+        if (token)
+            return <Row className="mx-0">
+                <Button
+                    color="danger" // danger warning primary
+                    className="mr-3"
+                    type="submit"
+                    onClick={() => refActionModalRemoveService.current.toggleModal()}
+
+                >
+                    {t("Remove")}
+                </Button>
+                <Button
+                    color="primary"
+                    type="submit"
+                    onClick={onEditService}
+                >
+                    {t("Edit")}
+                </Button>
+            </Row>
+        else return <></>
+
+    }
+
     const initialValues = {}
     return (
         <>
@@ -108,6 +133,7 @@ const ServiceDetails = (props) => {
                                     {dataDetail?.groupDtoList?.map(e => < ServiceGroupDetails groupService={e}
                                         authorize={authorize}
                                         deleteApi={deleteApi}
+                                        token={token}
                                         serverUrl={values.serverUrl} />)}
                                 </Row>
                                 <StickyFooter>
@@ -117,24 +143,7 @@ const ServiceDetails = (props) => {
                                         >
                                             {t("Back")}
                                         </Button>
-                                        <Row className="mx-0">
-                                            <Button
-                                                color="danger" // danger warning primary
-                                                className="mr-3"
-                                                type="submit"
-                                                onClick={() => refActionModalRemoveService.current.toggleModal()}
-
-                                            >
-                                                {t("Remove")}
-                                            </Button>
-                                            <Button
-                                                color="primary"
-                                                type="submit"
-                                                onClick={onEditService}
-                                            >
-                                                {t("Edit")}
-                                            </Button>
-                                        </Row>
+                                        {bottomButtonList()}
                                     </Row>
                                 </StickyFooter>
                             </Form>

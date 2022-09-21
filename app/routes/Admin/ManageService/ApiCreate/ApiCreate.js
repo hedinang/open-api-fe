@@ -18,13 +18,25 @@ import { AddItemRequest } from "routes/components";
 import { HeaderSecondary } from "routes/components/HeaderSecondary";
 import SystemService from "services/SystemService";
 import uuid from 'uuid/v4';
+import getItemParameter from "../../../components/AddItemRequest/ItemParameter";
 const ApiCreate = (props) => {
     const { t } = useTranslation();
     const showToast = useToast();
     const history = useHistory();
     const [isCreate, setIsCreate] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
-    const initialValues = {}
+    const [listDataType, setListDataType] = useState(['string', 'boolean', 'number'])
+    const [listParamType, setListParamType] = useState(['header', 'body', 'none'])
+    const [listBoolean, setListBoolean] = useState(['true', 'false'])
+    const initialValues = {
+        name: '',
+        serviceId: '',
+        method: '',
+        encryptionType: '',
+        groupId: '',
+        requestBody: '',
+        params: [],
+    }
 
     const onSavePressHandler = async (values) => {
         let response = await SystemService.createApi(values)
@@ -41,7 +53,14 @@ const ApiCreate = (props) => {
     const addItemManual = (totalData, setFieldValue, tableName) => {
         let items = totalData === undefined ? [] : [...totalData]
         items.push({
-            id: uuid()
+            id: uuid(),
+            paramName: '',
+            dataType: '',
+            paramType: '',
+            defaultValue: '',
+            mandatory: false,
+            note: '',
+            autoGenerate: false
         })
         setFieldValue(tableName, items)
     };
@@ -49,6 +68,27 @@ const ApiCreate = (props) => {
         rowData = rowData.filter(e => e.id !== id)
         setFieldValue(tableName, rowData)
     };
+    const onChangeMandatory = (e, rowData, data, params) => {
+        const newRowData = [...rowData];
+        newRowData.forEach(item => {
+            if (item.id === data.id)
+                item.mandatory = e.checked;
+        });
+        params.api.setRowData(newRowData);
+
+    }
+    const onChangeAutoGenerate = (e, rowData, data, params) => {
+        const newRowData = [...rowData];
+        newRowData.forEach((item, index) => {
+            if (item.id === data.id) {
+                newRowData[index] = data;
+                newRowData[index].autoGenerate = e.checked;
+            }
+        });
+        params.api.setRowData(newRowData);
+    }
+
+
     return (
         <Container fluid>
             <Formik
@@ -109,6 +149,20 @@ const ApiCreate = (props) => {
                                         rowDataItemReq={values.params !== undefined ? values.params : []}
                                         onDeleteItem={(id, rowData) => onDeleteItemReq(id, rowData, setFieldValue, 'params')}
                                         apiCreate={true}
+                                        listDataType={listDataType}
+                                        listParamType={listParamType}
+                                        listBoolean={listBoolean}
+                                        onChangeMandatory={
+                                            (e, rowData, data, params) => {
+                                                onChangeMandatory(e, rowData, data, params);
+                                            }
+                                        }
+                                        onChangeAutoGenerate={
+                                            (e, rowData, data, params) => {
+                                                onChangeAutoGenerate(e, rowData, data, params);
+                                            }
+                                        }
+
                                     />
                                 </Col>
                             </Row>

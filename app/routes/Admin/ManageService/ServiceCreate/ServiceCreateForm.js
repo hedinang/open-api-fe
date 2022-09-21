@@ -39,6 +39,7 @@ const ServiceCreateForm = (props) => {
                                             type="text"
                                             value={serviceName}
                                             onChange={onChange}
+                                            placeholder="enter name for service"
                                         />
                                     </Col>
                                 </Row>

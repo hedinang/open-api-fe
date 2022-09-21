@@ -10,6 +10,7 @@ import getItemGroup from "./ItemGroup";
 import getItemServerUrl from "./ItemServerUrl";
 import SelectWithHorizontalLine from "./SelectWithHorizontalLine";
 import getItemAuthorize from "./ItemAuthorize";
+import { Checkbox } from "primereact/checkbox";
 
 const defaultColDef = {
     editable: false,
@@ -67,12 +68,18 @@ const AddItemRequest = (props) => {
         groupTable,
         serverUrlTable,
         apiCreate,
+        apiUpdate,
         urlName,
         paramName,
         groupName,
         priority,
         params,
-        authorizeTable
+        authorizeTable,
+        listDataType,
+        listParamType,
+        onChangeMandatory,
+        onChangeAutoGenerate,
+        listBoolean
 
 
     } = props;
@@ -109,10 +116,45 @@ const AddItemRequest = (props) => {
 
     const AccountCellRenderer = ({ value }) => value?.accountNumber ?? value ?? "";
 
+    const MandatoryRenderer = (params) => {
+        const { data, agGridReact } = params;
+        const rowDataCol = agGridReact?.props?.rowData;
+        const { mandatory } = data;
+        return (
+            <Checkbox
+                name="mandatory"
+                checked={mandatory}
+                onChange={(e) => onChangeMandatory(e, rowDataCol, data, params)}
+            />
+        );
+    };
+    const AutoGenerateRenderer = (params) => {
+        const { data, agGridReact } = params;
+        const rowDataCol = agGridReact?.props?.rowData;
+        const { autoGenerate } = data;
+        return (
+            <Checkbox
+                name="autoGenerate"
+                checked={autoGenerate}
+                onChange={(e) => onChangeAutoGenerate(e, rowDataCol, data, params)}
+            />
+        );
+    };
     const getColumnDefs = () => {
         if (apiCreate) {
             return getItemParameter(
-                rowDataItemReq
+                rowDataItemReq,
+                listDataType,
+                listParamType,
+                listBoolean
+            );
+        }
+        if (apiUpdate) {
+            return getItemParameter(
+                rowDataItemReq,
+                listDataType,
+                listParamType,
+                listBoolean
             );
         }
         if (groupTable) {
@@ -148,6 +190,8 @@ const AddItemRequest = (props) => {
                 addressCellRenderer: AddressCellRenderer,
                 accountCellRenderer: AccountCellRenderer,
                 priceTypeCellRenderer: PriceTypeCellRenderer,
+                mandatoryRenderer: MandatoryRenderer,
+                autoGenerateRenderer: AutoGenerateRenderer,
                 customTooltip: CustomTooltip,
                 editCell: SelectWithHorizontalLine,
                 agDropdownInput: AgDropdownInput

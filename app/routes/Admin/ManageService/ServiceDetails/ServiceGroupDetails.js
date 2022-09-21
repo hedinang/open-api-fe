@@ -6,7 +6,7 @@ import {
 } from "components";
 import ServiceDetailLine from "./ServiceDetailLine";
 const ServiceGroupDetails = (props) => {
-    const { groupService, serverUrl, requestBody, authorize, deleteApi } = props
+    const { groupService, serverUrl, requestBody, authorize, deleteApi, token } = props
     const { t } = useTranslation();
     return (
         <Col lg={12} style={{ paddingTop: '10px' }}>
@@ -26,7 +26,7 @@ const ServiceGroupDetails = (props) => {
                     authorize={authorize}
                     apiId={e.id}
                     deleteApi={deleteApi}
-                // disabled={!purchaseDetailsStates.isEdit}
+                    token={token}
                 />
             })}
         </Col>

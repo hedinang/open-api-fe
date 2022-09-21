@@ -5,8 +5,8 @@ import { SidebarMenu } from "../../components";
 const SidebarMiddleNav = ({ items, userDetails, permissionReducer }) => {
     // check token lets to set sidebar
     let sidbarItems = []
-    const cookie = localStorage.getItem(process.env.SHARE_COOKIES_NAME)
-    if (cookie)
+    const token = localStorage.getItem(process.env.SHARE_COOKIES_NAME)
+    if (token)
         sidbarItems = ([{
             id: '1',
             icon: 'fa fa-fw fa-home',

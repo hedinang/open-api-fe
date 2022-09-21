@@ -106,7 +106,8 @@ const ServiceDetailLine = (props) => {
         appKey,
         authorize,
         apiId,
-        deleteApi
+        deleteApi,
+        token
     } = props;
     const history = useHistory();
     const refActionModalRemoveApi = useRef(null);
@@ -218,12 +219,33 @@ const ServiceDetailLine = (props) => {
             search: `?id=${apiId}`
         });
     }
-    // const deleteApi = (e) => {
-    //     history.push({
-    //         pathname: 'api-edit',
-    //         search: `?id=${apiId}`
-    //     });
-    // }
+    const editApiButtonList = () => {
+        if (token)
+            return <>
+                <Col xs='1'>
+                    <Button btn btn-primary style={{
+                        color: 'white', backgroundColor: '#4ecb93'
+                    }}
+                        onClick={editApi}
+                    >
+                        Edit
+                    </Button>
+                </Col>
+                <Col xs='1'>
+                    <Button btn btn-primary style={{
+                        color: 'white', backgroundColor: 'red'
+                    }}
+                        // onClick={e => deleteApi(apiId)}
+                        onClick={() => refActionModalRemoveApi.current.toggleModal()}
+                    >
+                        DELETE
+                    </Button>
+                </Col>
+            </>
+        else return <>
+            <Col xs='2'></Col>
+        </>
+    }
     return (
         <>
             <Formik
@@ -282,25 +304,7 @@ const ServiceDetailLine = (props) => {
                                                     </Col>
                                                     <Col xs='8'>
                                                     </Col>
-                                                    <Col xs='1'>
-                                                        <Button btn btn-primary style={{
-                                                            color: 'white', backgroundColor: '#4ecb93'
-                                                        }}
-                                                            onClick={editApi}
-                                                        >
-                                                            Edit
-                                                        </Button>
-                                                    </Col>
-                                                    <Col xs='1'>
-                                                        <Button btn btn-primary style={{
-                                                            color: 'white', backgroundColor: 'red'
-                                                        }}
-                                                            // onClick={e => deleteApi(apiId)}
-                                                            onClick={() => refActionModalRemoveApi.current.toggleModal()}
-                                                        >
-                                                            DELETE
-                                                        </Button>
-                                                    </Col>
+                                                    {editApiButtonList()}
                                                 </Row>
                                             </Col>
                                         </Row>

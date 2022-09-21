@@ -7,15 +7,27 @@ const formatNumber = (params) => {
     if (value) return formatDisplayDecimal(Number(value), 2);
     return "0.00";
 };
+const editableMandatoryLogic = (params) => (
+    (params.data.mandatory));
+
+const editableAutoGenerateLogic = (params) => (
+    (params.data.autoGenerate));
+
 
 const getItemParameter = (
-    paramName,
-    dataType,
-    paramType,
-    defaultValue,
-    mandatory,
-    note,
-    autoGenerate
+    {
+        paramName,
+        dataType,
+        paramType,
+        defaultValue,
+        mandatory,
+        note,
+        autoGenerate,
+        id
+    },
+    listDataType,
+    listParamType,
+    listBoolean,
 ) => [
         {
             headerName: i18next.t("action"),
@@ -33,6 +45,12 @@ const getItemParameter = (
         {
             headerName: i18next.t("dataType"),
             field: "dataType",
+            cellEditor: "agDropdownSelection",
+            // cellRenderer: "uomCellRenderer",
+            cellEditorParams: {
+                values: listDataType,
+                getOption: (value) => ({ label: value, value: value })
+            },
             editable: true,
             width: 150
 
@@ -40,6 +58,11 @@ const getItemParameter = (
         {
             headerName: i18next.t("paramType"),
             field: "paramType",
+            cellEditor: "agDropdownSelection",
+            cellEditorParams: {
+                values: listParamType,
+                getOption: (value) => ({ label: value, value: value })
+            },
             editable: true,
             width: 150
 
@@ -47,24 +70,58 @@ const getItemParameter = (
         {
             headerName: i18next.t("defaultValue"),
             field: "defaultValue",
+            cellEditor: "agLargeTextCellEditor",
             editable: true,
             width: 300
         },
         {
             headerName: i18next.t("mandatory"),
             field: "mandatory",
+            // cellRenderer: "mandatoryRenderer",
+            // editable: editableMandatoryLogic,
+            // filter: false,
+            // cellStyle: (params) => {
+            //     return {
+            //         display: "flex",
+            //         justifyContent: "center",
+            //         alignItems: "center",
+            //         paddingBottom: "20px"
+            //     };
+            // },
+            cellEditor: "agDropdownSelection",
+            cellEditorParams: {
+                values: listBoolean,
+                getOption: (value) => ({ label: value, value: value })
+            },
             editable: true,
-            width: 150
+            width: 180,
+            suppressSizeToFit: true
         },
         {
             headerName: i18next.t("note"),
             field: "note",
+            cellEditor: "agLargeTextCellEditor",
             editable: true,
             width: 400
         },
         {
             headerName: i18next.t("autoGenerate"),
             field: "autoGenerate",
+            // cellRenderer: "autoGenerateRenderer",
+            // editable: editableAutoGenerateLogic,
+            // cellStyle: (params) => {
+            //     return {
+            //         display: "flex",
+            //         justifyContent: "center",
+            //         alignItems: "center",
+            //         paddingBottom: "20px"
+            //     };
+            // },
+            cellEditor: "agDropdownSelection",
+            cellEditorParams: {
+                values: listBoolean,
+                getOption: (value) => ({ label: value, value: value })
+            },
             editable: true,
             width: 150
 

@@ -22,6 +22,9 @@ const ApiEdit = (props) => {
     const { t } = useTranslation();
     const [isCreate, setIsCreate] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
+    const [listDataType, setListDataType] = useState(['string', 'boolean', 'number'])
+    const [listParamType, setListParamType] = useState(['header', 'body', 'none'])
+    const [listBoolean, setListBoolean] = useState(['true', 'false'])
     const initialValues = {}
     const [dataDetail, setDataDetail] = useState()
     const showToast = useToast();
@@ -133,7 +136,10 @@ const ApiEdit = (props) => {
                                     <AddItemRequest
                                         rowDataItemReq={values.params !== undefined ? values.params : []}
                                         onDeleteItem={(id, rowData) => onDeleteItemReq(id, rowData, setFieldValue, 'params')}
-                                        apiCreate={true}
+                                        apiUpdate={true}
+                                        listDataType={listDataType}
+                                        listParamType={listParamType}
+                                        listBoolean={listBoolean}
                                     />
                                 </Col>
                             </Row>
